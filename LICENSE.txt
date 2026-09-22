@@ -1,0 +1,269 @@
+# STRYNIUM Miner Software License Agreement — V1.0.0
+
+Read this Agreement and the accompanying Use Terms before installing or using
+the Software. Install or use it only if You agree to these terms, subject to
+rights that applicable law does not permit the parties to exclude.
+
+Copyright © 2026 STRYNIUM. All rights reserved.
+
+## 1. Definitions and parties
+
+“Licensor” means the individual copyright owner who publishes and operates the
+Software under the STRYNIUM name. STRYNIUM is the public product and brand
+designation; it is not a representation that a company, corporation, LLC or
+separate incorporated legal entity exists. The individual's personal legal
+name is not publicly disclosed in this Agreement.
+
+“Software” means the first-party portions of the STRYNIUM Miner V1 Server and Tunnel
+executables and associated documentation that the Licensor makes available
+under this Agreement. “You” means the individual
+or organization lawfully using the Software. A person accepting for an
+organization must be authorized to do so. “Third-Party Components” means code,
+libraries, data and assets provided under terms of their respective owners.
+
+## 2. License grant
+
+Subject to this Agreement and section 12, the Licensor grants You a
+non-exclusive, non-transferable license to download, install, execute and use
+the Software in binary form on systems You own or are authorized to administer.
+You may make copies reasonably necessary for that permitted installation, use
+and backup. Internal copies within the same licensed organization for its
+authorized operations are not a grant to redistribute the Software to others.
+
+No first-party source-code delivery, sublicense, resale or general
+redistribution right is granted. This is a license, not a sale of ownership.
+No activation, license-server or payment feature is promised or required by
+this Agreement merely because contractual restrictions appear here.
+
+## 3. Free V1 use
+
+The license price for STRYNIUM Miner V1 under this Agreement is free. You do not incur
+a license subscription or automatic license fee by using this V1 license.
+You remain responsible for equipment, electricity, connectivity, pool/provider
+charges and other costs independently incurred in Your operations.
+
+## 4. Commercial and internal business use
+
+Commercial use and internal business use are permitted within section 2,
+including use in Your authorized mining operations. That permission does not
+permit resale, redistribution or bundling of the Software itself. It does not
+grant any right to use third-party systems without authorization or to represent
+Your business as endorsed by the Licensor or a coin project.
+
+## 5. Redistribution restriction
+
+Except for section 2's permitted internal copies, section 12's independent
+third-party rights, non-waivable legal rights, or the Licensor's separate prior
+written permission, You must not publish, mirror, upload, supply, sublicense,
+transfer or otherwise redistribute the first-party Software to third parties.
+Free availability from an official distribution channel does not itself grant
+You a redistribution license. Sharing a link to the official distribution
+channel is not prohibited redistribution of a copy under this section.
+
+## 6. Resale, bundling and modified distribution
+
+You must not sell, resell, rent or bundle the first-party Software
+with another product or distribution without separate prior written permission.
+You must not distribute modified versions, repackaged versions or derivative
+distributions of the first-party Software. No general right to adapt the
+first-party Software is granted by this Agreement. Ordinary configuration and
+management through supported product interfaces are permitted uses, not
+prohibited repackaging. Mandatory-law and third-party exceptions remain intact.
+
+## 7. Reverse engineering and mandatory-law exceptions
+
+You must not reverse engineer, decompile, disassemble or otherwise attempt to
+derive the first-party source code, except to the extent applicable law gives
+You a right that cannot lawfully be excluded or restricted, or the applicable
+Third-Party Component terms permit or require the activity for that component.
+
+Nothing in this Agreement requires You to waive a non-waivable right, or makes
+prior Licensor consent a condition of exercising such a right. Any lawful
+interoperability, security, analysis or other statutory exception applies to
+its legally permitted scope. This section does not assert that the restriction is enforceable in every
+jurisdiction.
+
+## 8. Authorized equipment and acceptable use
+
+You must own, or have valid authorization to manage, the miners, systems,
+accounts, data and network resources used with the Software. You must not use
+it for unauthorized control of devices, unauthorized mining, interception or
+access to third-party data, credential theft, impersonation, fraud, intentional
+network disruption, or circumvention of another party's access controls without
+lawful authority. The companion Use Terms elaborate these operational duties.
+
+## 9. Legal compliance
+
+You are responsible for assessing and complying with applicable laws, sanctions,
+export controls, local mining restrictions and other requirements relevant to
+Your location, equipment and activities. No country list is incorporated here.
+This Agreement does not represent that mining, any coin, or any particular use
+of the Software is lawful everywhere, or authorize conduct prohibited by law.
+
+## 10. Benchmark publication
+
+You may publish truthful and non-misleading benchmarks. Identify relevant
+version, configuration, hardware, workload and material test limitations so the
+results are not presented misleadingly. Do not fabricate results, conceal
+material qualifications or imply sponsorship, approval or endorsement that
+does not exist. This section is not a prior-publication approval requirement
+and does not restrict rights that applicable law protects from contractual
+restriction.
+
+## 11. Ownership and reservation of rights
+
+The Software is proprietary freeware distributed in binary form, not an
+open-source grant of the Licensor's first-party code. The Licensor and the
+respective Third-Party Component owners retain their rights. Rights not
+expressly granted are reserved, subject to applicable law and section 12.
+Do not remove or falsify required copyright, license, attribution or origin
+notices. No trademark registration or third-party endorsement is represented.
+
+## 12. Third-Party Components and controlling carve-out
+
+Third-Party Components are governed by their own applicable licenses and
+notices. Those terms prevail over this Agreement to the extent of any conflict
+concerning the respective component. This Agreement does not restrict any
+copying, modification, redistribution, reverse engineering, debugging, source
+access or other right granted by those terms or mandatory law.
+
+Refer to the accompanying THIRD_PARTY_NOTICES.txt and applicable upstream terms.
+The first-party binary-only policy does not eliminate a third-party source or
+notice obligation. System prerequisites are distinct from bundled components;
+in particular, an independently installed WebView2 runtime is not licensed or
+redistributed by this Agreement. Acknowledging a coin mark does not itself
+establish permission to distribute its artwork.
+
+## 13. Mining and economic risk
+
+No hashrate, mining yield, profitability, pool availability, coin price, network
+difficulty, revenue or uptime is guaranteed. Results depend on conditions
+outside the Licensor's control, including equipment, configuration, power,
+networks, pools, protocol changes and markets. You bear the operational and
+economic risks of Your decisions, subject to liabilities and rights that cannot
+lawfully be excluded. The Software and its metrics are not a promise of return
+or investment advice.
+
+## 14. Availability and performance
+
+The Software, external pools and networks may be unavailable, interrupted,
+incompatible or fail. No uninterrupted, error-free or continuous availability,
+particular performance, or continued compatibility is guaranteed. You should
+plan for outages and independently verify configurations and operational
+results. This section does not override any non-waivable legal obligation.
+
+## 15. Support and service levels
+
+No support service-level agreement, response time, maintenance period,
+remediation deadline or continuing support obligation is included in this free
+V1 license. Any such undertaking requires a separate express agreement.
+Voluntary assistance does not by itself promise an SLA or perpetual support.
+
+## 16. Security and operational responsibility
+
+Use suitable access controls, network isolation, credential protection, backups,
+updates and monitoring for Your environment. Protect bootstrap material,
+passphrases and runtime data; do not place secrets in public reports or
+unnecessarily exposed command lines. These recommendations do not guarantee
+complete security or transfer non-excludable responsibilities to You.
+
+This Agreement does not introduce telemetry consent, additional data-collection
+rights or a hosted service. Any separate feature requiring such terms must be
+described and lawfully agreed separately rather than inferred from this license.
+
+## 17. Updates and future versions
+
+The Licensor may offer updates or future versions, but does not promise to do
+so, or to preserve compatibility or support indefinitely. A future version may
+have separately presented terms. Merely publishing new terms does not impose
+retroactive payment obligations on already granted free V1 use. Any legally
+effective change requires the notice/assent process applicable to that change.
+
+## 18. Future paid products and services
+
+The Licensor reserves the right to offer future paid products, versions,
+features or services under separate terms. You are not automatically enrolled,
+subscribed, activated for payment or charged under this Agreement. Any purchase
+or paid service requires separately disclosed terms and Your agreement. This
+reservation does not convert the existing V1 license price into a retroactive fee.
+
+## 19. Term and termination
+
+The license continues unless terminated in accordance with its terms or law.
+You may stop using the Software at any time. The Licensor may terminate Your
+first-party license for material breach, subject to any notice, opportunity to
+cure or other procedure required by applicable law. No technical remote-disable
+or license-revocation service is promised by this clause.
+
+Upon valid termination, cease use under the terminated first-party grant and
+remove copies except those You are entitled or required by law to retain.
+Independent third-party rights and provisions intended to survive, including
+ownership and lawful liability provisions, are unaffected within their scope.
+
+## 20. Disclaimer of warranties
+
+To the extent permitted by applicable law, the Software is provided “as is” and
+“as available”, without express or implied warranties, including warranties of
+merchantability, satisfactory quality, fitness for a particular purpose,
+non-infringement, accuracy, security or reliability. No oral statement or
+informal assistance creates an additional warranty unless lawfully and expressly
+agreed. Non-excludable statutory warranties and consumer rights remain intact.
+
+## 21. Limitation of liability
+
+Subject to section 22 and to the extent permitted by applicable law, the
+Licensor is not liable for indirect, incidental, special or consequential loss,
+or loss of profits, expected mining rewards, business opportunity, revenue or
+data arising from use of or inability to use the Software, whether the claim
+is based on contract, tort or another legal theory.
+
+This Agreement sets no numerical aggregate liability cap. These exclusions
+apply only to the extent lawful and enforceable and remain subject to section 22.
+
+## 22. Non-excludable rights and liabilities
+
+Nothing excludes or limits liability for fraud or fraudulent misrepresentation,
+death or personal injury caused by negligence where exclusion is prohibited,
+or any other liability that cannot lawfully be excluded or limited. Nothing
+removes non-waivable consumer or other statutory rights. An exclusion applies
+only to the extent it is lawful and enforceable in the relevant circumstances;
+free provision of V1 does not itself extinguish those rights.
+
+## 23. Governing law
+
+This Agreement is governed by the laws of the Hong Kong Special Administrative
+Region, subject to mandatory protections that applicable law does not permit
+the parties to exclude by a choice-of-law clause. This choice does not determine
+whether a particular mining activity is lawful in Your location.
+
+## 24. Dispute jurisdiction
+
+This Agreement does not designate an exclusive court, arbitration institution
+or venue, and does not create a class-action waiver or special service-of-process
+mechanism. Competent jurisdiction is determined under applicable law.
+
+## 25. Severability
+
+If a provision is held invalid or unenforceable, it applies only to any extent
+lawfully permitted or is severed as required by applicable law. The remaining
+provisions continue to the extent legally possible. This clause is not an
+instruction to a court to enforce an unlawful restriction.
+
+## 26. Entire agreement, precedence and amendments
+
+This Agreement and its expressly incorporated Use Terms describe
+the first-party license arrangement, without displacing mandatory rights,
+applicable Third-Party Component terms or any separate expressly agreed terms.
+If the Use Terms conflict on the first-party license grant, this Agreement
+controls; third-party and mandatory-law carve-outs take precedence over both.
+No informal statement is an amendment merely because support was provided.
+Amendments must be presented clearly and become effective only through a
+legally appropriate notice and assent process. Merely displaying this Agreement
+in a repository does not override applicable requirements for effective agreement.
+
+## 27. Official distribution and contact status
+
+The official distribution repository is
+https://github.com/strynium/strynium-miner.
+A dedicated public contact channel has not been designated for V1. Do not send
+secrets or sensitive security material through public repository Issues.
