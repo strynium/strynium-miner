@@ -45,9 +45,8 @@ uptime or universal pool-compatibility guarantee is made.
 
 ## Downloads
 
-Use the assets from [GitHub Releases](https://github.com/strynium/strynium-miner/releases).
-V1.0.0 publication is pending; do not treat repository documentation alone as an
-available binary release.
+STRYNIUM Miner V1.0.0 is available from
+[GitHub Releases](https://github.com/strynium/strynium-miner/releases).
 
 GitHub's automatically generated **Source code (zip)** and **Source code
 (tar.gz)** archives contain only this public documentation repository, not
