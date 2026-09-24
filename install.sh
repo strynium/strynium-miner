@@ -87,12 +87,18 @@ def operator(data):
         assert not any(c in str(p) for c in '\r\n\t')
     return data, account
 try:
-    if cmd == 'platform':
+    if cmd in ('platform', 'os-display'):
         values = {}
         for line in pathlib.Path(args[0]).read_text().splitlines():
             if '=' in line:
                 k,v = line.split('=',1); values[k] = v.strip('"\x27')
-        assert values.get('ID') == 'ubuntu' and values.get('VERSION_ID','').startswith('24.04')
+        if cmd == 'platform':
+            assert values.get('ID') == 'ubuntu' and values.get('VERSION_ID','').startswith('24.04')
+        else:
+            version = values.get('VERSION_ID', '')
+            pretty = values.get('PRETTY_NAME', '')
+            assert version
+            print(pretty if version in pretty else f"{values.get('NAME', values.get('ID', 'UNKNOWN'))} {version}")
     elif cmd == 'safe':
         pathcheck(args[0], int(args[1]), len(args) > 2)
     elif cmd == 'lan':
@@ -454,20 +460,32 @@ tunnel_status() {
     pids=$(facts pids "$BIN/strynium-tunnel" "$OPERATOR") || { printf 'UNKNOWN\n'; return; }
     if [[ -n $pids ]]; then printf 'PROCESS_RUNNING / CONNECTION_UNKNOWN\n'; else printf 'LOCKED / STOPPED\n'; fi
 }
+display_state() {
+    case $1 in
+        NOT_INSTALLED) say '未安装' 'NOT_INSTALLED' ;;
+        RUNNING) say '运行中' 'RUNNING' ;;
+        STOPPED) say '已停止' 'STOPPED' ;;
+        'INSTALLED / OPERATOR_UNKNOWN') say '已安装 / 操作用户未知' "$1" ;;
+        'PROCESS_RUNNING / CONNECTION_UNKNOWN') say '进程运行中 / 连接状态未知' "$1" ;;
+        'LOCKED / STOPPED') say '已锁定 / 已停止' "$1" ;;
+        UNKNOWN) say '未知' "$1" ;;
+    esac
+}
 status_screen() {
     heading '系统状态' 'System status'
-    if [[ ! -f $BIN/strynium-server ]]; then printf 'Server: NOT_INSTALLED\n'
+    if [[ ! -f $BIN/strynium-server ]]; then printf 'Server: '; display_state NOT_INSTALLED
     elif systemctl is-active --quiet "$SERVICE"; then
-        printf '%s● Server: RUNNING%s\n' "$GREEN" "$RESET"
+        printf '%s● Server: %s%s\n' "$GREEN" "$(display_state RUNNING)" "$RESET"
         local stamp
         stamp=$(systemctl show "$SERVICE" -p ActiveEnterTimestampMonotonic --value 2>/dev/null) || stamp=0
         if [[ $stamp =~ ^[0-9]+$ && $stamp != 0 ]]; then
             awk -v start="$stamp" '{printf "Server uptime: %.0f seconds\n", $1-start/1000000}' /proc/uptime
         fi
-    else printf 'Server: STOPPED\n'; fi
-    printf 'Tunnel: '; tunnel_status
+    else printf 'Server: '; display_state STOPPED; fi
+    printf 'Tunnel: '; display_state "$(tunnel_status)"
     if [[ -f $BIN/strynium-server ]] && discover_web; then printf 'Web: %s\n' "$WEB_URL"; else printf 'Web: UNKNOWN / NOT_READY\n'; fi
-    printf 'Ubuntu / %s\n' "$(uname -m)"
+    printf '%s: %s\n' "$(say '操作系统' 'Operating system')" "$(facts os-display /etc/os-release)"
+    printf '%s: %s\n' "$(say '架构' 'Architecture')" "$(uname -m)"
     printf 'Host: %s\nInstall: %s\nServer data: %s\n' "$(hostname)" "$ROOT" "$DATA"
 }
 logs_screen() {
@@ -479,7 +497,7 @@ logs_screen() {
             if journalctl --quiet --no-pager -u "$SERVICE" -n 100 -o json --output-fields=PRIORITY > "$TMP/journal" 2>/dev/null; then
                 facts journal "$TMP/journal"; rm -f -- "$TMP/journal"
             else rm -f -- "$TMP/journal"; warn '日志不可用。' 'Journal unavailable.'; fi ;;
-        2) tunnel_status; say 'Tunnel 在交互终端运行；安装器不记录其输出或解锁输入。历史日志未由安装器采集。' \
+        2) display_state "$(tunnel_status)"; say 'Tunnel 在交互终端运行；安装器不记录其输出或解锁输入。历史日志未由安装器采集。' \
             'Tunnel runs interactively; installer does not record its output or unlock input. Historical logs are not collected.' ;;
     esac
 }
@@ -513,7 +531,7 @@ diagnostic() {
             warn "Tunnel: $store；未执行解密/连接验收。" "Tunnel: $store; decryption/connection not tested."
         else fail 'Tunnel store 权限不安全/无法验证' 'Tunnel store permissions unsafe/unverified' || true; fi
     fi
-    tunnel_status
+    display_state "$(tunnel_status)"
     warn '未修改防火墙；若远端不可达，请核查仅授权 LAN 到实际 HTTPS 端口的规则，不要开放公网。' \
         'Firewall unchanged. If remote access fails, check authorized LAN rules for the verified HTTPS port; do not expose it publicly.'
 }
@@ -535,7 +553,7 @@ tunnel_menu() {
     heading 'Tunnel 管理' 'Tunnel management'
     say '1. 启动 / 解锁  2. 停止  3. 状态  4. 日志  0. 返回' '1. Run / unlock  2. Stop  3. Status  4. Logs  0. Back'
     ask '选择' 'Select'
-    case $REPLY in 1) tunnel_run ;; 2) tunnel_stop ;; 3) tunnel_status ;; 4) logs_screen ;; esac
+    case $REPLY in 1) tunnel_run ;; 2) tunnel_stop ;; 3) display_state "$(tunnel_status)" ;; 4) logs_screen ;; esac
 }
 install_both() {
     install_server || return $?
@@ -612,11 +630,11 @@ advanced() {
 menu_text() {
     if [[ $1 == fresh ]]; then
         heading '安装与更新' 'Install and update'
-        say '1. 安装 STRYNIUM Server\n2. 安装 STRYNIUM Tunnel\n3. 安装 Server + Tunnel\n4. 更新 / 修复已安装组件' \
-            '1. Install STRYNIUM Server\n2. Install STRYNIUM Tunnel\n3. Install Server + Tunnel\n4. Update / repair installed components' | sed 's/\\n/\n/g'
+        say '1. 安装 STRYNIUM Server    2. 安装 STRYNIUM Tunnel\n3. 安装 Server + Tunnel    4. 更新 / 修复已安装组件' \
+            '1. Install STRYNIUM Server    2. Install STRYNIUM Tunnel\n3. Install Server + Tunnel    4. Update / repair installed components' | sed 's/\\n/\n/g'
         heading '运行与管理' 'Run and manage'
-        say '5. 查看运行状态\n6. 查看访问与登录信息\n7. 查看日志\n8. 系统诊断\n9. 高级设置\n10. 卸载\n0. 退出' \
-            '5. Runtime status\n6. Web access / login\n7. Logs\n8. Diagnostics\n9. Advanced\n10. Uninstall\n0. Exit' | sed 's/\\n/\n/g'
+        say '5. 查看运行状态           6. 查看访问与登录信息\n7. 查看日志               8. 系统诊断\n9. 高级设置              10. 卸载\n0. 退出' \
+            '5. Runtime status            6. Web access / login\n7. Logs                      8. Diagnostics\n9. Advanced                 10. Uninstall\n0. Exit' | sed 's/\\n/\n/g'
     else
         say '1. 安装 / 更新\n2. Server 管理\n3. Tunnel 管理\n4. 查看访问与登录信息\n5. 查看日志\n6. 系统诊断\n7. 高级设置\n8. 卸载\n0. 退出' \
             '1. Install / update\n2. Server management\n3. Tunnel management\n4. Web access / login\n5. Logs\n6. Diagnostics\n7. Advanced\n8. Uninstall\n0. Exit' | sed 's/\\n/\n/g'
