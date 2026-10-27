@@ -58,8 +58,8 @@ command -v curl >/dev/null 2>&1 && command -v sha256sum >/dev/null 2>&1 && ca_re
 printf '环境检查完成，正在准备 STRYNIUM 管理菜单……\n'
 
 # This immutable commit and digest are updated together after manager acceptance.
-manager_ref='6a08a75de9186d97a546b3e28ad91e869d2e56ae'
-manager_sha256='10955ff7218ebc1638d57033d0abf6fc56c2b71b0d5220c7410d2b9e8c460254'
+manager_ref='c6da2a0af0c7ab784f97dc28cfca1032e43cff52'
+manager_sha256='207d35b3c205115a0d212c68b14fbd08009ea7016adcc8c7e9a2f2198bd0fa92'
 manager_url="https://raw.githubusercontent.com/strynium/strynium-miner/${manager_ref}/scripts/strynium_manager.py"
 temporary=$(mktemp -d /tmp/strynium-install.XXXXXXXX)
 trap 'rm -rf -- "$temporary"' EXIT
