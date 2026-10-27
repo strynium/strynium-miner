@@ -38,17 +38,59 @@
 <a id="install"></a>
 ## 一键安装与管理
 
-Linux / Ubuntu x64 使用同一条命令，先选择**服务端**或**本地加密端**，再选择操作：
+**云服务器通常只安装「服务端」；矿场电脑安装「本地加密端」。** 云服务器选择 Linux / Ubuntu x64 系统后，可直接在云厂商网页里的远程终端操作，不需要先学习 Linux 命令。
+
+1. 在云厂商控制台找到这台服务器，打开「远程连接 / 登录终端」。
+2. 复制下面**整段命令**，粘贴到终端并回车。脚本自动检查并准备所需组件，已安装的直接复用。
+3. 菜单选择 **1 服务端 → 1 安装 / 更新**，填写这台服务器的公网 IPv4。安装结束会显示访问地址和初始账号密码，之后用浏览器管理。
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/strynium/strynium-miner/main/install.sh -o strynium-install.sh && sudo bash strynium-install.sh
+bash <<'STRYNIUM_SETUP'
+set -e
+as_root() {
+  if [ "$(id -u)" -eq 0 ]; then
+    "$@"
+  elif command -v sudo >/dev/null 2>&1; then
+    sudo -- "$@"
+  else
+    echo '请在云服务器控制台使用 root 登录，再执行此命令。' >&2; exit 1
+  fi
+}
+if ! command -v curl >/dev/null 2>&1 || { [ ! -s /etc/ssl/certs/ca-certificates.crt ] && [ ! -s /etc/pki/tls/certs/ca-bundle.crt ]; }; then
+  echo '正在自动准备下载工具，请稍候……'
+  if command -v apt-get >/dev/null 2>&1; then
+    as_root apt-get update
+    as_root apt-get install -y curl ca-certificates
+  elif command -v dnf >/dev/null 2>&1; then
+    as_root dnf install -y curl ca-certificates
+  elif command -v yum >/dev/null 2>&1; then
+    as_root yum install -y curl ca-certificates
+  elif command -v pacman >/dev/null 2>&1; then
+    as_root pacman -S --needed --noconfirm curl ca-certificates
+  elif command -v zypper >/dev/null 2>&1; then
+    as_root zypper --non-interactive install curl ca-certificates
+  else
+    echo '暂不支持此系统的自动安装，请查看安装说明。' >&2; exit 1
+  fi
+fi
+curl -fsSL --proto '=https' --proto-redir '=https' --connect-timeout 15 --max-time 120 --retry 2 \
+  https://raw.githubusercontent.com/strynium/strynium-miner/main/install.sh -o strynium-install.sh
+bash strynium-install.sh
+STRYNIUM_SETUP
 ```
 
-安装入口需要 `curl`；管理器需要 Python 3.8+ 和运行中的 systemd，缺少基础依赖时提示从系统软件源安装。完成后再次管理只需：
+使用普通账号时会自动申请管理员权限；如果提示密码，输入当前 Linux 登录账号的密码即可。root 登录可直接运行。后续管理只需：
 
 ```bash
-sudo strynium-manage
+strynium-manage
 ```
+
+<details>
+<summary>系统兼容要求（通常无需手动处理）</summary>
+
+管理器使用 Python 3.8+ 和系统自带的 systemd。下载工具、运行环境、CA 证书等缺失时会从系统软件源自动安装；无需用户逐项安装。过旧系统、没有 systemd 的容器和未知软件源不会被强行修改，脚本会说明原因；可参考 [手动安装说明](INSTALL.md)。不自动升级或重装操作系统。
+
+</details>
 
 | 管理操作 | 已支持 |
 | :--- | :--- |
@@ -68,7 +110,7 @@ sudo strynium-manage
 | :--- | :--- |
 | 初始账号 | `strynium` |
 | 初始密码 | `Strynium2026.` |
-| Web 端口 | 首次脚本安装时随机，查看安装输出或 `sudo strynium-manage server status` |
+| Web 端口 | 首次脚本安装时随机，查看安装输出或 `strynium-manage server status` |
 
 首次登录必须按提示修改账号和密码。新密码至少 **8 位**，包含大小写字母、数字和特殊字符。**更新已有安装保留原端口和已修改的账号密码，不会重新随机或恢复初始凭据。** 本地加密端不使用这组服务端账号。
 

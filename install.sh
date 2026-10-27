@@ -7,20 +7,27 @@ umask 077
 fail() { printf 'STRYNIUM: %s\n' "$*" >&2; exit 1; }
 [[ $(uname -s) == Linux ]] || fail '仅支持 Linux / Ubuntu。'
 [[ $(uname -m) == x86_64 ]] || fail '当前软件包仅支持 x64。'
-[[ $EUID -eq 0 ]] || fail '请运行 sudo bash strynium-install.sh；本地端程序仍以普通用户运行。'
+if [[ $EUID -ne 0 ]]; then
+    command -v sudo >/dev/null 2>&1 || fail '当前账号没有管理员权限。请在云服务器控制台使用 root 登录，再运行安装命令。'
+    printf '正在申请安装权限；如有提示，请输入当前 Linux 账号的密码。\n'
+    exec sudo -- bash "$0" "$@"
+fi
+[[ -d /run/systemd/system ]] || fail '当前环境不支持后台服务管理。请在完整的 Linux 云主机中运行；容器或精简环境请使用软件包手动启动。'
+
+printf '正在检查安装环境，已有组件会直接复用……\n'
+python_ready() { command -v python3 >/dev/null 2>&1 && python3 -c 'import sys; sys.exit(sys.version_info < (3, 8))'; }
+ca_ready() { [[ -s /etc/ssl/certs/ca-certificates.crt || -s /etc/pki/tls/certs/ca-bundle.crt ]]; }
 
 need_dependencies=0
-command -v python3 >/dev/null 2>&1 || need_dependencies=1
+python_ready || need_dependencies=1
 command -v curl >/dev/null 2>&1 || need_dependencies=1
 command -v sha256sum >/dev/null 2>&1 || need_dependencies=1
-[[ -s /etc/ssl/certs/ca-certificates.crt || -s /etc/pki/tls/certs/ca-bundle.crt ]] || need_dependencies=1
+ca_ready || need_dependencies=1
 if [[ $need_dependencies -eq 1 ]]; then
-    printf '需要从系统软件源安装 Python 3、curl、CA 证书及校验工具，输入 yes 继续：' >/dev/tty
-    read -r answer </dev/tty
-    [[ $answer == yes ]] || fail '已取消。'
+    printf '正在从系统软件源自动准备缺少的运行组件，请稍候……\n'
     if command -v apt-get >/dev/null 2>&1; then
         apt-get update
-        apt-get install -y python3 curl ca-certificates coreutils
+        DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3 curl ca-certificates coreutils
     elif command -v dnf >/dev/null 2>&1; then
         dnf install -y python3 curl ca-certificates coreutils
     elif command -v yum >/dev/null 2>&1; then
@@ -30,14 +37,17 @@ if [[ $need_dependencies -eq 1 ]]; then
     elif command -v zypper >/dev/null 2>&1; then
         zypper --non-interactive install python3 curl ca-certificates coreutils
     else
-        fail '请先安装 Python 3.8+、curl、CA 证书与 sha256sum。'
+        fail '暂不支持此系统的自动安装。请查看 INSTALL.md 中的手动安装方式。'
     fi
 fi
-python3 -c 'import sys; sys.exit(sys.version_info < (3, 8))' || fail '需要 Python 3.8 或更新版本。'
+python_ready || fail '当前系统软件源提供的运行环境过旧。请使用较新的 Ubuntu/Debian 等系统，或按 INSTALL.md 手动运行软件包；脚本不会自动升级操作系统。'
+command -v curl >/dev/null 2>&1 && command -v sha256sum >/dev/null 2>&1 && ca_ready \
+    || fail '基础组件准备失败，请检查系统软件源或网络后重新运行。'
+printf '环境检查完成，正在准备 STRYNIUM 管理菜单……\n'
 
 # This immutable commit and digest are updated together after manager acceptance.
-manager_ref='3329e15671034310bd36a8c426401ade298f0424'
-manager_sha256='be8d25780f5bd9a5b446e8d54601b29bbe6309c94c610fdad54b198970705784'
+manager_ref='65ced3caf28f34d7a001e2e32d3926a2a4af558a'
+manager_sha256='3654984050478d5e0825bb7d76a2b7a2e79c36969e69ca1ed913eee73c7e9396'
 manager_url="https://raw.githubusercontent.com/strynium/strynium-miner/${manager_ref}/scripts/strynium_manager.py"
 temporary=$(mktemp -d /tmp/strynium-install.XXXXXXXX)
 trap 'rm -rf -- "$temporary"' EXIT

@@ -5,13 +5,46 @@
 <a id="manager"></a>
 ## Linux / Ubuntu 一键安装与管理
 
-适用 Linux x64、Python 3.8+、运行中的 systemd。Ubuntu 与其他 Linux 使用同一入口；无 systemd 的环境使用下方 tar 包方式。首次命令需要 curl（Ubuntu 可先运行 `sudo apt install curl`）。
+云服务器通常只安装服务端，矿场电脑安装本地加密端。在云厂商控制台打开「远程连接 / 登录终端」，复制下面整段命令并回车，然后选择「1 服务端 → 1 安装 / 更新」。缺少的基础组件会自动准备，不需要逐项手动安装。
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/strynium/strynium-miner/main/install.sh -o strynium-install.sh && sudo bash strynium-install.sh
+bash <<'STRYNIUM_SETUP'
+set -e
+as_root() {
+  if [ "$(id -u)" -eq 0 ]; then
+    "$@"
+  elif command -v sudo >/dev/null 2>&1; then
+    sudo -- "$@"
+  else
+    echo '请在云服务器控制台使用 root 登录，再执行此命令。' >&2; exit 1
+  fi
+}
+if ! command -v curl >/dev/null 2>&1 || { [ ! -s /etc/ssl/certs/ca-certificates.crt ] && [ ! -s /etc/pki/tls/certs/ca-bundle.crt ]; }; then
+  echo '正在自动准备下载工具，请稍候……'
+  if command -v apt-get >/dev/null 2>&1; then
+    as_root apt-get update
+    as_root apt-get install -y curl ca-certificates
+  elif command -v dnf >/dev/null 2>&1; then
+    as_root dnf install -y curl ca-certificates
+  elif command -v yum >/dev/null 2>&1; then
+    as_root yum install -y curl ca-certificates
+  elif command -v pacman >/dev/null 2>&1; then
+    as_root pacman -S --needed --noconfirm curl ca-certificates
+  elif command -v zypper >/dev/null 2>&1; then
+    as_root zypper --non-interactive install curl ca-certificates
+  else
+    echo '暂不支持此系统的自动安装，请查看安装说明。' >&2; exit 1
+  fi
+fi
+curl -fsSL --proto '=https' --proto-redir '=https' --connect-timeout 15 --max-time 120 --retry 2 \
+  https://raw.githubusercontent.com/strynium/strynium-miner/main/install.sh -o strynium-install.sh
+bash strynium-install.sh
+STRYNIUM_SETUP
 ```
 
-入口固定校验管理程序的 SHA-256，再进入中文交互菜单；首次缺少 Python、CA 证书等依赖时提示从系统软件源安装。后续重新运行上述命令可更新管理程序，日常维护用 `sudo strynium-manage`。
+入口固定校验管理程序的 SHA-256，再进入中文交互菜单。已安装组件直接复用，缺少的从系统软件源自动安装；root 直接运行，普通账号自动申请 sudo 权限。后续重新运行上述命令可更新管理程序，日常维护用 `strynium-manage`。
+
+技术范围：Linux x64、Python 3.8+、运行中的 systemd。容器、过旧系统或未知软件源可能不支持自动安装，脚本会说明原因；不会自动升级操作系统。无 systemd 的环境可使用下方 tar 包方式。
 
 ### 首次安装
 
@@ -26,23 +59,23 @@ curl -fsSL https://raw.githubusercontent.com/strynium/strynium-miner/main/instal
 ### 常用维护命令
 
 ```bash
-sudo strynium-manage                     # 中文菜单
-sudo strynium-manage server update       # 更新服务端
-sudo strynium-manage local update        # 更新本地端
-sudo strynium-manage server status       # 地址、端口、版本和进程
-sudo strynium-manage server logs         # 最近 100 条日志
-sudo strynium-manage server diagnose     # 本机健康检查
-sudo strynium-manage server port         # 修改 Web 端口（支持 random）
-sudo strynium-manage server reset-account # 交互重置账号密码
-sudo strynium-manage local console       # 本地端完整登录链接
-sudo strynium-manage local restart       # 重启本地端
-sudo strynium-manage server stop         # 停止服务端
-sudo strynium-manage server start        # 启动服务端
-sudo strynium-manage local uninstall     # 卸载本地端，保留数据
-sudo strynium-manage server uninstall    # 卸载服务端，保留数据
+strynium-manage                     # 中文菜单
+strynium-manage server update       # 更新服务端
+strynium-manage local update        # 更新本地端
+strynium-manage server status       # 地址、端口、版本和进程
+strynium-manage server logs         # 最近 100 条日志
+strynium-manage server diagnose     # 本机健康检查
+strynium-manage server port         # 修改 Web 端口（支持 random）
+strynium-manage server reset-account # 交互重置账号密码
+strynium-manage local console       # 本地端完整登录链接
+strynium-manage local restart       # 重启本地端
+strynium-manage server stop         # 停止服务端
+strynium-manage server start        # 启动服务端
+strynium-manage local uninstall     # 卸载本地端，保留数据
+strynium-manage server uninstall    # 卸载服务端，保留数据
 ```
 
-安装、更新、启停、重启、状态、日志、诊断、控制台链接与卸载支持两端。`port` 和 `reset-account` 仅针对服务端。密码在交互终端输入，不回显，不经命令参数、环境变量或明文文件保存。首次重置若缺少 libargon2，将提示安装对应系统库。
+安装、更新、启停、重启、状态、日志、诊断、控制台链接与卸载支持两端。`port` 和 `reset-account` 仅针对服务端。密码在交互终端输入，不回显，不经命令参数、环境变量或明文文件保存。首次重置若缺少账号维护组件，将从系统软件源自动准备。
 
 修改 Web 端口、重置账号会短暂停止对应服务并备份，随后原来运行的服务会重启并检查。失败时恢复原配置；原来已停止的服务保持停止。**两步验证及恢复码、矿机自报账号、抽水配置、证书和客户端身份均保留。** 重置控制台密码不能解除本地端的加密存储密码，也不会移除两步验证。
 
