@@ -41,42 +41,11 @@
 **云服务器通常只安装「服务端」；矿场电脑安装「本地加密端」。** 云服务器选择 Linux / Ubuntu x64 系统后，可直接在云厂商网页里的远程终端操作，不需要先学习 Linux 命令。
 
 1. 在云厂商控制台找到这台服务器，打开「远程连接 / 登录终端」。
-2. 复制下面**整段命令**，粘贴到终端并回车。脚本自动检查并准备所需组件，已安装的直接复用。
+2. 复制下面**这一行命令**，粘贴到终端并回车。脚本自动检查并准备所需组件，已安装的直接复用。
 3. 菜单选择 **1 服务端 → 1 安装 / 更新**，填写这台服务器的公网 IPv4。安装结束会显示访问地址和初始账号密码，之后用浏览器管理。
 
 ```bash
-bash <<'STRYNIUM_SETUP'
-set -e
-as_root() {
-  if [ "$(id -u)" -eq 0 ]; then
-    "$@"
-  elif command -v sudo >/dev/null 2>&1; then
-    sudo -- "$@"
-  else
-    echo '请在云服务器控制台使用 root 登录，再执行此命令。' >&2; exit 1
-  fi
-}
-if ! command -v curl >/dev/null 2>&1 || { [ ! -s /etc/ssl/certs/ca-certificates.crt ] && [ ! -s /etc/pki/tls/certs/ca-bundle.crt ]; }; then
-  echo '正在自动准备下载工具，请稍候……'
-  if command -v apt-get >/dev/null 2>&1; then
-    as_root apt-get update
-    as_root apt-get install -y curl ca-certificates
-  elif command -v dnf >/dev/null 2>&1; then
-    as_root dnf install -y curl ca-certificates
-  elif command -v yum >/dev/null 2>&1; then
-    as_root yum install -y curl ca-certificates
-  elif command -v pacman >/dev/null 2>&1; then
-    as_root pacman -S --needed --noconfirm curl ca-certificates
-  elif command -v zypper >/dev/null 2>&1; then
-    as_root zypper --non-interactive install curl ca-certificates
-  else
-    echo '暂不支持此系统的自动安装，请查看安装说明。' >&2; exit 1
-  fi
-fi
-curl -fsSL --proto '=https' --proto-redir '=https' --connect-timeout 15 --max-time 120 --retry 2 \
-  https://raw.githubusercontent.com/strynium/strynium-miner/main/install.sh -o strynium-install.sh
-bash strynium-install.sh
-STRYNIUM_SETUP
+bash <(curl -fsSL https://github.com/strynium/strynium-miner/raw/main/install.sh)
 ```
 
 使用普通账号时会自动申请管理员权限；如果提示密码，输入当前 Linux 登录账号的密码即可。root 登录可直接运行。后续管理只需：
@@ -88,7 +57,7 @@ strynium-manage
 <details>
 <summary>系统兼容要求（通常无需手动处理）</summary>
 
-管理器使用 Python 3.8+ 和系统自带的 systemd。下载工具、运行环境、CA 证书等缺失时会从系统软件源自动安装；无需用户逐项安装。过旧系统、没有 systemd 的容器和未知软件源不会被强行修改，脚本会说明原因；可参考 [手动安装说明](INSTALL.md)。不自动升级或重装操作系统。
+一行入口使用 Bash 和 curl，通过 HTTPS 下载脚本；极简系统缺少 curl 时，参见 [安装说明](INSTALL.md#entry-troubleshooting)。管理器使用 Python 3.8+ 和系统自带的 systemd。下载工具、运行环境、CA 证书等缺失时会从系统软件源自动安装；无需用户逐项安装。过旧系统、没有 systemd 的容器和未知软件源不会被强行修改，脚本会说明原因；可参考 [手动安装说明](INSTALL.md)。不自动升级或重装操作系统。
 
 </details>
 

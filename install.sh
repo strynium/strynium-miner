@@ -10,7 +10,19 @@ fail() { printf 'STRYNIUM: %s\n' "$*" >&2; exit 1; }
 if [[ $EUID -ne 0 ]]; then
     command -v sudo >/dev/null 2>&1 || fail '当前账号没有管理员权限。请在云服务器控制台使用 root 登录，再运行安装命令。'
     printf '正在申请安装权限；如有提示，请输入当前 Linux 账号的密码。\n'
-    exec sudo -- bash "$0" "$@"
+    # sudo closes process-substitution descriptors such as /dev/fd/63. Stage a
+    # complete download privately before elevation instead of reusing "$0".
+    elevation_dir=$(mktemp -d /tmp/strynium-elevate.XXXXXXXX)
+    trap 'rm -rf -- "$elevation_dir"' EXIT
+    if [[ -f "$0" ]]; then
+        cp -- "$0" "$elevation_dir/install.sh"
+    else
+        curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+            --connect-timeout 15 --max-time 120 --retry 2 \
+            https://raw.githubusercontent.com/strynium/strynium-miner/main/install.sh -o "$elevation_dir/install.sh"
+    fi
+    sudo -- bash "$elevation_dir/install.sh" "$@"
+    exit 0
 fi
 [[ -d /run/systemd/system ]] || fail '当前环境不支持后台服务管理。请在完整的 Linux 云主机中运行；容器或精简环境请使用软件包手动启动。'
 

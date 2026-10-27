@@ -5,46 +5,20 @@
 <a id="manager"></a>
 ## Linux / Ubuntu 一键安装与管理
 
-云服务器通常只安装服务端，矿场电脑安装本地加密端。在云厂商控制台打开「远程连接 / 登录终端」，复制下面整段命令并回车，然后选择「1 服务端 → 1 安装 / 更新」。缺少的基础组件会自动准备，不需要逐项手动安装。
+云服务器通常只安装服务端，矿场电脑安装本地加密端。在云厂商控制台打开「远程连接 / 登录终端」，复制下面这一行命令并回车，然后选择「1 服务端 → 1 安装 / 更新」。缺少的基础组件会自动准备，不需要逐项手动安装。
 
 ```bash
-bash <<'STRYNIUM_SETUP'
-set -e
-as_root() {
-  if [ "$(id -u)" -eq 0 ]; then
-    "$@"
-  elif command -v sudo >/dev/null 2>&1; then
-    sudo -- "$@"
-  else
-    echo '请在云服务器控制台使用 root 登录，再执行此命令。' >&2; exit 1
-  fi
-}
-if ! command -v curl >/dev/null 2>&1 || { [ ! -s /etc/ssl/certs/ca-certificates.crt ] && [ ! -s /etc/pki/tls/certs/ca-bundle.crt ]; }; then
-  echo '正在自动准备下载工具，请稍候……'
-  if command -v apt-get >/dev/null 2>&1; then
-    as_root apt-get update
-    as_root apt-get install -y curl ca-certificates
-  elif command -v dnf >/dev/null 2>&1; then
-    as_root dnf install -y curl ca-certificates
-  elif command -v yum >/dev/null 2>&1; then
-    as_root yum install -y curl ca-certificates
-  elif command -v pacman >/dev/null 2>&1; then
-    as_root pacman -S --needed --noconfirm curl ca-certificates
-  elif command -v zypper >/dev/null 2>&1; then
-    as_root zypper --non-interactive install curl ca-certificates
-  else
-    echo '暂不支持此系统的自动安装，请查看安装说明。' >&2; exit 1
-  fi
-fi
-curl -fsSL --proto '=https' --proto-redir '=https' --connect-timeout 15 --max-time 120 --retry 2 \
-  https://raw.githubusercontent.com/strynium/strynium-miner/main/install.sh -o strynium-install.sh
-bash strynium-install.sh
-STRYNIUM_SETUP
+bash <(curl -fsSL https://github.com/strynium/strynium-miner/raw/main/install.sh)
 ```
 
 入口固定校验管理程序的 SHA-256，再进入中文交互菜单。已安装组件直接复用，缺少的从系统软件源自动安装；root 直接运行，普通账号自动申请 sudo 权限。后续重新运行上述命令可更新管理程序，日常维护用 `strynium-manage`。
 
 技术范围：Linux x64、Python 3.8+、运行中的 systemd。容器、过旧系统或未知软件源可能不支持自动安装，脚本会说明原因；不会自动升级操作系统。无 systemd 的环境可使用下方 tar 包方式。
+
+<a id="entry-troubleshooting"></a>
+### 入口问题
+
+上述一行命令需要在 Bash 终端运行，并已具备 curl 和可用的 HTTPS 证书。若极简 Ubuntu / Debian 镜像提示 `curl: command not found`，可先在 root 终端运行 `apt-get update && apt-get install -y curl ca-certificates`；普通账号在两条 apt-get 命令前加 sudo。其他发行版使用对应系统软件源安装这两个组件，再运行上方一行命令。运行环境的后续准备由脚本自动完成。
 
 ### 首次安装
 
