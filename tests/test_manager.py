@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import ssl
+import sys
 import tempfile
 import unittest
 import urllib.request
@@ -87,6 +88,25 @@ class MaintenanceTests(unittest.TestCase):
         text = m.redact(raw)
         self.assertNotIn('abc123', text)
         self.assertNotIn('secret.payload', text)
+
+    def test_nonroot_manager_requests_sudo_without_running_operation(self):
+        with mock.patch.object(sys, 'argv', ['manager.py', 'server', 'status']), \
+                mock.patch.object(m.os, 'geteuid', return_value=1000), \
+                mock.patch.object(m.shutil, 'which', return_value='/usr/bin/sudo'), \
+                mock.patch.object(m.os, 'execv', side_effect=SystemExit(0)) as elevate:
+            with self.assertRaises(SystemExit): m.main()
+        arguments = elevate.call_args.args[1]
+        self.assertEqual(arguments[:2], ['/usr/bin/sudo', '--'])
+        self.assertEqual(arguments[-2:], ['server', 'status'])
+
+    def test_missing_account_maintenance_library_is_prepared_automatically(self):
+        with mock.patch.object(m, 'argon_library', side_effect=[m.Error('missing'), object()]), \
+                mock.patch.object(m.shutil, 'which', return_value='/usr/bin/apt-get'), \
+                mock.patch.object(m, 'command') as run, \
+                mock.patch.object(m, 'confirm', side_effect=AssertionError('unexpected dependency question')):
+            m.ensure_argon()
+        self.assertEqual(run.call_args_list[0].args[0], ['apt-get', 'update'])
+        self.assertEqual(run.call_args_list[1].args[0], ['apt-get', 'install', '-y', 'libargon2-1'])
 
 
 if __name__ == '__main__':

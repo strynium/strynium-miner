@@ -36,7 +36,7 @@ import time
 import urllib.parse
 import urllib.request
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 REPO = 'strynium/strynium-miner'
 API = 'https://api.github.com/repos/' + REPO + '/releases/latest'
 INITIAL_USER = 'strynium'
@@ -870,7 +870,7 @@ def ensure_argon():
         argon_library();return
     except Error:
         pass
-    confirm('密码重置需要系统 libargon2，是否从系统软件源安装')
+    print('正在从系统软件源自动准备账号维护组件，请稍候……')
     if shutil.which('apt-get'):
         command(['apt-get', 'update'], capture=False)
         command(['apt-get', 'install', '-y', 'libargon2-1'], capture=False)
@@ -902,7 +902,11 @@ def main():
     parser.add_argument('action', nargs='?', choices=['install','update','start','stop','restart','status','logs','diagnose','console','port','reset-account','uninstall'])
     args = parser.parse_args()
     if os.geteuid() != 0:
-        raise Error('请使用 sudo 运行；本地端程序仍以所选普通用户运行')
+        sudo = shutil.which('sudo')
+        if not sudo:
+            raise Error('请在云服务器控制台使用 root 登录后运行管理命令')
+        print('正在申请管理权限；如有提示，请输入当前 Linux 账号的密码。', flush=True)
+        os.execv(sudo, [sudo, '--', sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]])
     if platform.system() != 'Linux' or platform.machine() not in ('x86_64', 'amd64'):
         raise Error('当前软件包仅支持 Linux x64')
     if sys.version_info < (3, 8):
