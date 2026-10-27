@@ -17,7 +17,7 @@ material. No response time or support SLA is promised.
 - Download from the canonical STRYNIUM GitHub Releases page and compare SHA-256
   against its manifest and checksum file. Hashes detect byte differences; an
   unsigned checksum file is not an independent publisher signature.
-- Windows V1 executables are not Authenticode-signed. Respect OS and security
+- Windows executables are not Authenticode-signed. Respect OS and security
   product warnings; do not disable Defender, SmartScreen or antivirus.
 - Restrict Console access to authorized operators and trusted management
   networks. Do not expose the management Console directly to the public Internet.
@@ -29,8 +29,8 @@ material. No response time or support SLA is promised.
   variables, shell history, plaintext files, screenshots or support logs.
 - Keep TLS identity and certificate pins under controlled administration. Do not
   disable certificate validation or silently replace a mismatched pin.
-- On Ubuntu, use the encrypted credential store and interactive hidden unlock.
-  A new Tunnel process, including after reboot, requires unlock again. V1 does
+- On Linux / Ubuntu, use the encrypted credential store and interactive unlock in the loopback console.
+  A new local-client process, including after reboot, requires unlock again. This release does
   not provide unattended secure unlock on ordinary Linux hosts without TPM/KMS.
 - Keep OS prerequisites updated and use appropriate network isolation, backups
   and monitoring. Encrypted storage does not eliminate every operational risk.

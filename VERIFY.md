@@ -1,49 +1,27 @@
-# Verify your download
+# 下载文件校验
 
-Download SHA256SUMS.txt and STRYNIUM-V1.0.0-MANIFEST.json with the chosen binary
-from [GitHub Releases](https://github.com/strynium/strynium-miner/releases).
+从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r14-d11) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R14-D11-MANIFEST.json`，确保文件来自同一发布。
 
-Compare the entire SHA-256 value, not a shortened prefix. Stop if a filename,
-size or checksum differs. The manifest's sizes are bytes. These checks detect
-changed bytes; they do not independently authenticate an attacker-controlled
-download site. Use the canonical repository over HTTPS and respect OS policies.
+## Linux / Ubuntu
+
+只下载部分包时，在下载目录执行：
+
+```bash
+sha256sum --ignore-missing -c SHA256SUMS.txt
+```
+
+确认实际要安装的文件明确显示 `OK`；缺少或被改名的文件不会因其他条目成功而得到验证。全套下载可用 `sha256sum -c SHA256SUMS.txt`。软件包解压后的文件也附带独立 `SHA256SUMS.txt`。
 
 ## Windows PowerShell
 
-~~~powershell
-Get-FileHash -LiteralPath ".\strynium-server-v1.0.0-windows-x86_64.exe" -Algorithm SHA256
-Get-FileHash -LiteralPath ".\strynium-tunnel-v1.0.0-windows-x86_64.exe" -Algorithm SHA256
-~~~
+```powershell
+Get-FileHash -LiteralPath .\STRYNIUM-Local-Windows-x64-D11.zip -Algorithm SHA256
+```
 
-Compare each result with the same filename in SHA256SUMS.txt and the manifest.
-Case of hexadecimal letters does not change the hash value. Windows V1
-executables are not Authenticode-signed; the checksum is not a code signature.
+把输出的完整 SHA-256 与校验文件对应文件名的值比较，大小写不影响结果；不要只比较首尾几位。
 
-## Ubuntu
+## 来源与签名
 
-~~~bash
-sha256sum strynium-server-v1.0.0-ubuntu24.04-x86_64
-sha256sum strynium-tunnel-v1.0.0-ubuntu24.04-x86_64
-~~~
+SHA-256 证明文件字节是否一致，不等于独立发布者数字签名。本发布未提供独立签名，Windows 程序未使用 Authenticode 签名。不要关闭系统防护来绕过拦截；应核对官方仓库和文件校验，并遵循管理员策略。
 
-If all four listed binaries are in the same directory, this verifies every
-checksum entry:
-
-~~~bash
-sha256sum --check SHA256SUMS.txt
-~~~
-
-When only one platform's files have been downloaded, use the individual commands
-and compare their complete values; missing-file errors for the other platform
-are not successful verification.
-
-## Installed filenames
-
-The release filenames include version/platform information. Installation copies
-them to the standard names described in [INSTALL.md](INSTALL.md). Recompute
-SHA-256 after copying; changing a filename or adding executable permission does
-not change file contents. Never strip, patch or re-sign a download and then
-expect the original checksum to match.
-
-GitHub source archives contain this documentation repository, not proprietary
-product source or substitute executable downloads.
+发布清单列出文件大小、构建版本、校验值与验证范围。GitHub 自动生成的 Source code 仅包含公开文档仓库，不是产品源码或安装包。

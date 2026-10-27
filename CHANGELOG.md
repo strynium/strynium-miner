@@ -1,17 +1,14 @@
-# STRYNIUM Miner V1.0.0
+# 更新记录
 
-Initial public release — prepared for publication; not yet published.
+## v1.0.0-r14-d11 · 2026-10-28
 
-- Windows Server with an embedded management Console.
-- Windows Tunnel desktop GUI.
-- Ubuntu 24.04 x86_64 Server and headless Tunnel CLI.
-- Single-binary delivery for each component/platform.
-- LAN HTTPS management and remote Tunnel TLS with exact certificate pinning.
-- Coin/pool catalog and configurable mining routes.
-- Ubuntu Tunnel passphrase-unlocked encrypted credential store.
+以服务端 R14 和本地加密端 D11 重新开始软件发布，旧版发布资产已清理。
 
-Windows V1 executables are unsigned. Ubuntu Tunnel requires interactive unlock
-for each new process and an unlimited locked-memory allowance.
-See [INSTALL.md](INSTALL.md), [SECURITY.md](SECURITY.md) and [VERIFY.md](VERIFY.md).
-No profitability, hashrate, uptime or universal pool-compatibility guarantee
-is made.
+- 两端分别提供 Windows x64 ZIP、Linux x64 tar.gz、Ubuntu x64 DEB，共六种包。
+- 补齐最新 Linux / Ubuntu 本地端，Linux tar.gz 2.01 MiB、DEB 1.58 MiB，完整保留第三方许可。
+- 本地 Windows 初始窗口按屏幕宽 59%、高 73% 设置；关闭窗口隐藏到系统托盘。
+- 服务端修复重复密码显示按钮和旧品牌图标闪现；矿池地址主操作改为独立延迟测试；补齐前置加密配置说明。
+- 发布首页展示服务端、本地端两张演示截图，并提供安装、配置、校验文档。
+- 统一一键安装维护菜单仍为规划，旧脚本已停用，避免下载已删除资产。当前使用软件包及 INSTALL.md。
+
+验证范围与限制见发布清单和安装说明。本次不变更软件许可，不公开产品源码。
