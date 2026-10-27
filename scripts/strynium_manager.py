@@ -36,7 +36,7 @@ import time
 import urllib.parse
 import urllib.request
 
-VERSION = '1.0.2'
+VERSION = '1.0.3'
 REPO = 'strynium/strynium-miner'
 API = 'https://api.github.com/repos/' + REPO + '/releases/latest'
 INITIAL_USER = 'strynium'
@@ -83,6 +83,100 @@ def prompt(text, default='', secret=False):
 def confirm(text):
     if prompt(text + '，输入 yes 继续', 'no').lower() != 'yes':
         raise Error('已取消，未继续操作')
+
+
+def public_ipv4(value):
+    try:
+        address = ipaddress.IPv4Address(value.strip())
+        if address.is_global and not address.is_multicast and not address.is_reserved:
+            return str(address)
+    except (ValueError, AttributeError):
+        pass
+    return ''
+
+
+class NoDiscoveryRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise OSError('Address discovery does not follow redirects')
+
+
+def metadata_text(path, method='GET', headers=None):
+    # Only query the fixed ECS IP service, never credentials/user-data. Bypass
+    # proxies and reject redirects so the short-lived token stays on this host.
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoDiscoveryRedirect())
+    request = urllib.request.Request('http://100.100.100.200/latest/' + path, method=method, headers=headers or {})
+    with opener.open(request, timeout=1.5) as response:
+        body = response.read(1025)
+        if response.status != 200 or len(body) > 1024:
+            return ''
+        return body.decode('ascii').strip()
+
+
+def discover_public_ipv4():
+    # SSH_CONNECTION is client IP/port, then server IP/port. Never use the
+    # administrator's client address as the server address.
+    connection = os.environ.get('SSH_CONNECTION', '').split()
+    if len(connection) == 4:
+        address = public_ipv4(connection[2])
+        if address:
+            return address
+    try:
+        token = metadata_text('api/token', 'PUT', {'X-aliyun-ecs-metadata-token-ttl-seconds': '60'})
+        if token and '\r' not in token and '\n' not in token:
+            for item in ('eipv4', 'public-ipv4'):
+                try:
+                    address = public_ipv4(metadata_text('meta-data/' + item, headers={'X-aliyun-ecs-metadata-token': token}))
+                    if address:
+                        return address
+                except (OSError, ValueError, UnicodeError):
+                    continue
+    except (OSError, ValueError, UnicodeError):
+        pass
+    try:
+        result = subprocess.run(['ip', '-j', '-4', 'address', 'show', 'scope', 'global'],
+                                capture_output=True, text=True, timeout=2)
+        interfaces = json.loads(result.stdout) if result.returncode == 0 else []
+        addresses = {public_ipv4(item.get('local', '')) for interface in interfaces
+                     for item in interface.get('addr_info', [])}
+        addresses.discard('')
+        if len(addresses) == 1:
+            return addresses.pop()
+        if len(addresses) > 1:
+            return ''  # Multiple local public addresses need an explicit choice.
+    except (OSError, ValueError, TypeError, AttributeError, subprocess.TimeoutExpired):
+        pass
+    # NAT hosts may only have private interfaces. Require two direct HTTPS
+    # observations to agree; never take an HTTP proxy's address as this host's.
+    observed = []
+    for url in ('https://api.ipify.org', 'https://checkip.amazonaws.com'):
+        try:
+            result = subprocess.run(['curl', '-4', '--fail', '--silent', '--show-error', '--noproxy', '*',
+                                     '--proto', '=https', '--connect-timeout', '2', '--max-time', '4',
+                                     '--max-filesize', '1024', url],
+                                    capture_output=True, text=True, timeout=5)
+            address = public_ipv4(result.stdout) if result.returncode == 0 else ''
+            if not address:
+                return ''
+            observed.append(address)
+        except (OSError, subprocess.TimeoutExpired):
+            return ''
+    return observed[0] if len(set(observed)) == 1 else ''
+
+
+def choose_public_ipv4(allow_local=True):
+    print('正在自动识别服务器公网 IPv4……', flush=True)
+    address = discover_public_ipv4()
+    if address:
+        print('已自动识别公网 IPv4：' + address)
+        return address
+    hint = '（输入 local 仅本机管理）' if allow_local else ''
+    value = prompt('未能确定公网地址，请输入服务器公网 IPv4' + hint)
+    if allow_local and value.lower() == 'local':
+        return ''
+    address = public_ipv4(value)
+    if not address:
+        raise Error('未取得有效公网 IPv4，未继续操作；请检查云服务器公网 IP 配置')
+    return address
 
 
 def safe_path(path):
@@ -472,14 +566,7 @@ class Manager:
             data = self.root / 'var/lib/strynium'
             if data.exists() and any(data.iterdir()):
                 raise Error('发现已有数据但没有可识别服务；拒绝以全新安装覆盖，请先检查服务配置')
-            public_ip = prompt('服务器公网 IPv4（留空仅本机管理）')
-            if public_ip:
-                try:
-                    ip = ipaddress.IPv4Address(public_ip)
-                    if not ip.is_global:
-                        raise ValueError()
-                except ValueError as exc:
-                    raise Error('请输入有效公网 IPv4；仅本机运行请留空') from exc
+            public_ip = choose_public_ipv4()
             port = random_port()
             api_port = random_port((port,))
         else:
@@ -529,6 +616,12 @@ class Manager:
         exec_line = 'ExecStart=' + ' '.join(quote(a) for a in args) + '\n'
         if state['adopted']:
             content = '[Service]\nExecStart=\n' + exec_line
+            if component == 'server' and state.get('address_override'):
+                content += ''.join('Environment=' + quote(k + '=' + v) + '\n' for k, v in {
+                    'STRYNIUM_CONSOLE_MODE': state['mode'],
+                    'STRYNIUM_CONSOLE_PUBLIC_IP': state['public_ip'],
+                    'STRYNIUM_CONSOLE_HTTPS_PORT': str(state['port']),
+                }.items())
         else:
             account = pwd.getpwnam(state['user'])
             env = {'HOME': account.pw_dir, 'STRYNIUM_NO_BROWSER': '1', 'STRYNIUM_NO_PAUSE': '1'}
@@ -836,6 +929,48 @@ class Manager:
         confirm(f'修改 Web 端口为 {port} 并短暂重启服务端')
         self.maintain('port', port)
 
+    def repair_public_address(self):
+        old = self.require_state('server')
+        address = choose_public_ipv4(allow_local=False)
+        self.set_public_address(old, address)
+
+    def set_public_address(self, old, address):
+        address = public_ipv4(address)
+        if not address:
+            raise Error('无效公网 IPv4，未修改配置')
+        settings = self.settings(old)
+        if settings['web'].get('host_source') == 'manual' and settings['web'].get('access_host') != address:
+            raise Error('已设置自定义访问地址，请在控制台修改；未自动覆盖')
+        if old.get('mode') == 'public-cloud' and old.get('public_ip') == address:
+            print('公网访问地址已经正确，无需重启。');self.show_url(old);return
+        if old.get('certificate_bundle') or settings.get('tls', {}).get('certificate_path'):
+            raise Error('已有自定义 HTTPS 证书，请先核对证书包含目标公网 IP；未自动修改')
+        updated = copy.deepcopy(old)
+        updated.update(mode='public-cloud', public_ip=address, address_override=True, port=self.effective_port(old))
+        was_active = self.active('server')
+        backup = None
+        self.systemctl('stop', self.units['server'])
+        try:
+            with offline_lock(old['data']):
+                backup = self.snapshot(old)
+                self.write_unit(updated)
+            if was_active:
+                self.systemctl('start', self.units['server']);self.wait_health(updated)
+            updated.update(backup=str(backup), updated_at=now())
+            self.save(updated)
+        except BaseException:
+            self.systemctl('stop', self.units['server'], check=False)
+            if backup:
+                self.restore_snapshot(old, backup)
+                self.save(old)
+            if was_active:
+                self.systemctl('start', self.units['server'], check=False)
+            raise
+        print('公网访问地址已修复；原端口和数据已保留。备份：' + str(backup))
+        if not was_active:
+            print('服务原来已停止，配置将在下次启动时生效。')
+        self.show_url(updated)
+
     def uninstall(self, component):
         state = self.require_state(component)
         confirm(f'停止并卸载 {LABEL[component]}，配置和数据保留在 {state["data"]}')
@@ -901,7 +1036,7 @@ def main():
     parser = argparse.ArgumentParser(description='STRYNIUM Linux/Ubuntu 一键安装与管理')
     parser.add_argument('--version', action='version', version=VERSION)
     parser.add_argument('component', nargs='?', choices=list(LABEL))
-    parser.add_argument('action', nargs='?', choices=['install','update','start','stop','restart','status','logs','diagnose','console','port','reset-account','uninstall'])
+    parser.add_argument('action', nargs='?', choices=['install','update','start','stop','restart','status','logs','diagnose','console','port','reset-account','uninstall','public-ip'])
     args = parser.parse_args()
     if os.geteuid() != 0:
         sudo = shutil.which('sudo')
@@ -928,8 +1063,8 @@ def main():
             raise Error('另一个管理操作正在执行') from exc
         persist_manager()
         def dispatch(component, action):
-            if action in ('port', 'reset-account') and component != 'server':
-                raise Error('本地端没有服务端账号；此操作仅用于服务端')
+            if action in ('port', 'reset-account', 'public-ip') and component != 'server':
+                raise Error('此操作仅用于服务端')
             if action in ('install', 'update'):
                 manager.install(component)
             elif action in ('start', 'stop', 'restart'):
@@ -938,6 +1073,8 @@ def main():
                 manager.change_port()
             elif action == 'reset-account':
                 ensure_argon();manager.reset_account()
+            elif action == 'public-ip':
+                manager.repair_public_address()
             else:
                 getattr(manager, action)(component)
         if args.component and args.action:
@@ -951,10 +1088,12 @@ def main():
             while True:
                 print('\n' + LABEL[component] + '\n1. 安装 / 更新\n2. 启动\n3. 停止\n4. 重启\n5. 状态\n6. 日志\n7. 诊断\n8. 打开控制台')
                 if component == 'server':print('9. 修改 Web 端口\n10. 重置控制台账号密码')
-                print('11. 卸载（保留数据）\n0. 返回')
+                print('11. 卸载（保留数据）')
+                if component == 'server':print('12. 自动修复公网访问地址')
+                print('0. 返回')
                 choice = prompt('选择操作', '0')
                 if choice == '0':break
-                action = {'1':'install','2':'start','3':'stop','4':'restart','5':'status','6':'logs','7':'diagnose','8':'console','9':'port','10':'reset-account','11':'uninstall'}.get(choice)
+                action = {'1':'install','2':'start','3':'stop','4':'restart','5':'status','6':'logs','7':'diagnose','8':'console','9':'port','10':'reset-account','11':'uninstall','12':'public-ip'}.get(choice)
                 if action:
                     try:
                         dispatch(component, action)
