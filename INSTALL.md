@@ -2,7 +2,69 @@
 
 从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r14-d11) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
 
-统一安装维护菜单尚未交付；仓库旧 `install.sh` 已停用。以下为本版可用的安装方式。
+<a id="manager"></a>
+## Linux / Ubuntu 一键安装与管理
+
+适用 Linux x64、Python 3.8+、运行中的 systemd。Ubuntu 与其他 Linux 使用同一入口；无 systemd 的环境使用下方 tar 包方式。首次命令需要 curl（Ubuntu 可先运行 `sudo apt install curl`）。
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/strynium/strynium-miner/main/install.sh -o strynium-install.sh && sudo bash strynium-install.sh
+```
+
+入口固定校验管理程序的 SHA-256，再进入中文交互菜单；首次缺少 Python、CA 证书等依赖时提示从系统软件源安装。后续重新运行上述命令可更新管理程序，日常维护用 `sudo strynium-manage`。
+
+### 首次安装
+
+1. 选择服务端或本地加密端，再选「安装 / 更新」。两端可安装在不同电脑，按组件独立管理。
+2. 服务端填写实际公网 IPv4；留空仅本机访问。脚本创建专用服务用户，并从 **20000–60000** 随机选一个未占用的 Web 端口，内部 API 另选端口且仅监听本机。
+3. 成功后显示完整地址和初始登录信息：**账号 `strynium`，密码 `Strynium2026.`**。首次登录必须修改账号密码；新密码至少 8 位，包含大小写字母、数字及特殊字符。公开初始凭据仅用于首次初始化。
+4. 在云安全组和防火墙放行实际 Web、授权和代理端口；脚本不修改防火墙。证书信任应按实际访问地址配置。
+5. 本地端选择现有普通 Linux 用户和数据目录。脚本设置该服务的内存锁定额度，以普通用户运行；控制台只监听本机，默认 `17892`。从「打开控制台」取得完整链接，按下方配对步骤使用。
+
+首次随机端口仅指**管理脚本全新部署的服务端 Web 端口**。更新或接管已有服务保留原端口和账号；手动 tar / DEB 启动默认仍为 8443。进程开机启动不等于本地转发自动解锁；本地端每次重启仍需在页面解锁并「应用并启动」。
+
+### 常用维护命令
+
+```bash
+sudo strynium-manage                     # 中文菜单
+sudo strynium-manage server update       # 更新服务端
+sudo strynium-manage local update        # 更新本地端
+sudo strynium-manage server status       # 地址、端口、版本和进程
+sudo strynium-manage server logs         # 最近 100 条日志
+sudo strynium-manage server diagnose     # 本机健康检查
+sudo strynium-manage server port         # 修改 Web 端口（支持 random）
+sudo strynium-manage server reset-account # 交互重置账号密码
+sudo strynium-manage local console       # 本地端完整登录链接
+sudo strynium-manage local restart       # 重启本地端
+sudo strynium-manage server stop         # 停止服务端
+sudo strynium-manage server start        # 启动服务端
+sudo strynium-manage local uninstall     # 卸载本地端，保留数据
+sudo strynium-manage server uninstall    # 卸载服务端，保留数据
+```
+
+安装、更新、启停、重启、状态、日志、诊断、控制台链接与卸载支持两端。`port` 和 `reset-account` 仅针对服务端。密码在交互终端输入，不回显，不经命令参数、环境变量或明文文件保存。首次重置若缺少 libargon2，将提示安装对应系统库。
+
+修改 Web 端口、重置账号会短暂停止对应服务并备份，随后原来运行的服务会重启并检查。失败时恢复原配置；原来已停止的服务保持停止。**两步验证及恢复码、矿机自报账号、抽水配置、证书和客户端身份均保留。** 重置控制台密码不能解除本地端的加密存储密码，也不会移除两步验证。
+
+### 更新、备份和现有部署
+
+下载仅使用官方 GitHub 正式 Release，校验清单、文件大小、SHA-256 和包内校验后才安装。程序按版本独立存放，启动检查失败时回退；更新保留已有 Web 端口、账号密码与数据。已是最新版本时不重复安装。
+
+| 内容 | 默认位置 |
+| :--- | :--- |
+| 管理命令 | `/usr/local/sbin/strynium-manage` |
+| 管理器状态 | `/etc/strynium-manager`（仅 root 可读） |
+| 软件版本 | `/opt/strynium-managed/server`、`/opt/strynium-managed/local` |
+| 服务端数据 | `/var/lib/strynium` |
+| 本地端数据 | 所选用户的 `~/.local/state/STRYNIUM/LocalEncryption`，可选择原目录 |
+| 操作前备份 | `/var/backups/strynium-manager`（仅 root 可读，包含敏感配置） |
+| systemd 单元 | `strynium.service`、`strynium-local.service` |
+
+已有 R14 标准 `strynium.service`（启动器 `/usr/bin/strynium` 或 `/opt/strynium/scripts/start-console.sh`）可确认后接管。保留原服务单元及环境配置，仅增加程序启动覆盖文件。外部 EnvironmentFile、未知启动器、数据所有者不符等情况会拒绝自动接管，避免误覆盖。
+
+接管部署的卸载会停用服务、移除管理器版本和覆盖文件，保留原服务文件及原 DEB 包；如需卸载原 DEB，可再执行 `sudo apt remove strynium`。普通管理器新装直接删除自己的程序目录。所有卸载均保留运行数据、操作备份和管理命令，不提供自动清空数据选项。
+
+下列手动安装方式继续可用，不要让手动进程与 systemd 服务同时使用同一数据目录。
 
 ## Windows x64
 
@@ -78,7 +140,7 @@ Linux：完整解压服务端 tar 包，在目录运行 `sh scripts/start-consol
 
 默认控制台为 `https://127.0.0.1:8443`，数据目录 `${XDG_DATA_HOME:-$HOME/.local/share}/STRYNIUM/integrated`。以实际输出为准。DEB 提供程序，不会自动创建生产服务账号、systemd 服务或放行防火墙。
 
-首次使用授权部署渠道提供的初始凭据登录，按提示修改管理员账号密码；不要删除数据目录来绕过登录。
+初始账号 `strynium`、初始密码 `Strynium2026.`，首次登录按提示修改管理员账号密码；不要删除数据目录来绕过登录。
 
 ### 新建云服务器部署
 
@@ -113,3 +175,5 @@ sudo sh ./upgrade-r14.sh ./strynium_1.0.0+20261028.r14_amd64.deb YOUR_PUBLIC_IPV
 安装后的程序通过 12 项本地端与真实服务端集成检查：控制台资源、会话/来源校验、配对、端口冲突、授权转发、矿机去重与离线状态、凭据加密、重启恢复和撤销。测试矿池为本机合成数据。服务端 R14 与 Windows D11 延用此前验证的原始包，哈希未变。
 
 其他发行版、全部 Windows/浏览器版本和物理矿场环境没有在本轮逐一验证。详细校验与范围见发布清单。
+
+统一管理器另在 Ubuntu 26.04 x64 / WSL2 的真实 systemd 环境验证：两端安装、启停、更新、卸载保留数据、随机端口、初始登录、账号重置、端口占用拒绝、更新与配置失败回退。单元测试覆盖启用中的两步验证保留、配置链接拒绝、写入故障与下载重定向限制。具体范围见 [管理器验证记录](docs/MANAGER_VERIFICATION.md)。
