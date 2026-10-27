@@ -36,7 +36,7 @@ import time
 import urllib.parse
 import urllib.request
 
-VERSION = '1.0.1'
+VERSION = '1.0.2'
 REPO = 'strynium/strynium-miner'
 API = 'https://api.github.com/repos/' + REPO + '/releases/latest'
 INITIAL_USER = 'strynium'
@@ -65,17 +65,19 @@ def now():
 
 def prompt(text, default='', secret=False):
     try:
-        with open('/dev/tty', 'r+') as tty:
+        # Buffered r+ requires seeking, which terminal devices do not support.
+        # Separate text streams also keep prompts independent of redirected stdin.
+        with open('/dev/tty', 'r') as tty_in, open('/dev/tty', 'w') as tty_out:
             if secret:
-                return getpass.getpass(text + '：', stream=tty)
-            tty.write(text + (f' [{default}]' if default else '') + '：')
-            tty.flush()
-            value = tty.readline()
+                return getpass.getpass(text + '：', stream=tty_out)
+            tty_out.write(text + (f' [{default}]' if default else '') + '：')
+            tty_out.flush()
+            value = tty_in.readline()
             if not value:
                 raise Error('交互已取消')
             return value.strip() or default
     except OSError as exc:
-        raise Error('此操作需要交互终端，请直接运行 sudo strynium-manage') from exc
+        raise Error('此操作需要交互终端，请在云服务器远程终端中重新运行安装命令或 strynium-manage') from exc
 
 
 def confirm(text):
