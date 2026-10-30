@@ -1,6 +1,6 @@
 # 下载文件校验
 
-从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r15-d12) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R15-D12-MANIFEST.json`，确保文件来自同一发布。
+从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r16-d12) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R16-D12-MANIFEST.json`，确保文件来自同一发布。
 
 ## Linux / Ubuntu
 

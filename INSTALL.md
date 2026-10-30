@@ -1,6 +1,6 @@
-# 安装与维护 · 服务端 R15 / 本地加密端 D12
+# 安装与维护 · 服务端 R16 / 本地加密端 D12
 
-从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r15-d12) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
+从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r16-d12) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
 
 <a id="manager"></a>
 ## Linux / Ubuntu 一键安装与管理
@@ -84,7 +84,7 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 
 ## Windows x64
 
-服务端：完整解压 `STRYNIUM-Server-Windows-x64-R15.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
+服务端：完整解压 `STRYNIUM-Server-Windows-x64-R16.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
 
 本地端：完整解压 `STRYNIUM-Local-Windows-x64-D12.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
 
@@ -148,7 +148,7 @@ ssh -L 17892:127.0.0.1:17892 your-user@your-linux-host
 新装 Ubuntu：
 
 ```bash
-sudo apt install ./strynium_1.0.0+20261031.r15_amd64.deb
+sudo apt install ./strynium_1.0.0+20261031.r16_amd64.deb
 strynium
 ```
 
@@ -172,9 +172,9 @@ Linux：完整解压服务端 tar 包，在目录运行 `sh scripts/start-consol
 
 Web 管理端口、授权端口和代理端口按需放行；内部 API 只允许本机访问。证书信任需与实际地址匹配，不通过关闭证书校验来消除浏览器提示。
 
-### 已有部署更新至 R15
+### 已有部署更新至 R16
 
-继续使用首页一键命令，选择 **1 服务端 → 1 安装 / 更新**。本地端选择 **2 本地加密端 → 1 安装 / 更新**。
+继续使用首页一键命令，选择 **1 服务端 → 1 安装 / 更新**。本次本地端 D12 保持不变，已经使用 D12 的矿场无需更新本地端。
 
 管理器校验最新发布清单和软件包，备份后切换版本；保留既有账号、端口、证书、授权和数据，运行中的服务会短暂重启，失败回退。原已停止的服务保持停止。管理器部署不要另用 apt 替换 current 指向的程序；Linux 本地端更新后仍按原流程解锁并应用转发。
 
@@ -182,8 +182,8 @@ Web 管理端口、授权端口和代理端口按需放行；内部 API 只允�
 
 ## 验证范围
 
-本次 Windows / Linux 两组件构建及隔离控制台启动通过；956 项相关回归通过、12 项默认忽略，最终连接专项 10 项通过（有重叠，不能相加）。更新成功、失败回退、保持停止状态的隔离事务场景通过。
+本次服务端 Windows / Linux 正式构建、隔离 HTTPS 控制台与健康接口启动验证通过；具体回归数量、忽略测试和性能诊断见 [R16 / D12 验证说明](docs/RELEASE_R16_D12.md)。D12 三个平台原包直接复用，逐字节校验一致。
 
-DEB 已验证解包、二进制及内部校验；未重新验证所有发行版的 apt 依赖解析、全部 ASIC/商业矿池与长时间浸泡运行。先单台矿机连续测试至少 30 分钟。详见 [R15 / D12 验证说明](docs/RELEASE_R15_D12.md)。
+DEB 已核对解包、二进制和内部校验；未重新验证全部发行版的 apt 依赖解析或全部 ASIC 固件。更新后先单台矿机连续测试至少 30 分钟。
 
-管理器 1.0.3 代码与固定提交校验未改动，其此前验证记录见 [管理器验证](docs/MANAGER_VERIFICATION.md)。
+管理器 1.0.3 及固定提交校验未改动，本轮重新验证新清单选包、完整性校验和解包；此前更新事务验证见 [管理器验证](docs/MANAGER_VERIFICATION.md)。
