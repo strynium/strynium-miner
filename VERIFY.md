@@ -1,6 +1,6 @@
 # 下载文件校验
 
-从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r14-d11) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R14-D11-MANIFEST.json`，确保文件来自同一发布。
+从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r15-d12) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R15-D12-MANIFEST.json`，确保文件来自同一发布。
 
 ## Linux / Ubuntu
 
@@ -15,7 +15,7 @@ sha256sum --ignore-missing -c SHA256SUMS.txt
 ## Windows PowerShell
 
 ```powershell
-Get-FileHash -LiteralPath .\STRYNIUM-Local-Windows-x64-D11.zip -Algorithm SHA256
+Get-FileHash -LiteralPath .\STRYNIUM-Local-Windows-x64-D12.zip -Algorithm SHA256
 ```
 
 把输出的完整 SHA-256 与校验文件对应文件名的值比较，大小写不影响结果；不要只比较首尾几位。
