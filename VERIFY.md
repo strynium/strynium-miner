@@ -1,6 +1,6 @@
 # 下载文件校验
 
-从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r18-d13) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R18-D13-MANIFEST.json`，确保文件来自同一发布。
+从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r18-d14) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R18-D14-MANIFEST.json`，确保文件来自同一发布。
 
 ## Linux / Ubuntu
 
@@ -15,7 +15,7 @@ sha256sum --ignore-missing -c SHA256SUMS.txt
 ## Windows PowerShell
 
 ```powershell
-Get-FileHash -LiteralPath .\STRYNIUM-Local-Windows-x64-D13.zip -Algorithm SHA256
+Get-FileHash -LiteralPath .\STRYNIUM-Local-Windows-x64-D14.zip -Algorithm SHA256
 ```
 
 把输出的完整 SHA-256 与校验文件对应文件名的值比较，大小写不影响结果；不要只比较首尾几位。
@@ -29,3 +29,7 @@ SHA-256 证明文件字节是否一致，不等于独立发布者数字签名。
 ## 管理脚本
 
 `install.sh` 从固定 Git 提交下载管理程序，并用入口内置 SHA-256 验证后执行。Release 同时附带 `install.sh`、`strynium-manager.py` 与独立的 `MANAGER-SHA256SUMS.txt`，可使用 `sha256sum -c MANAGER-SHA256SUMS.txt` 检查这两个脚本。软件包仍使用原 `SHA256SUMS.txt`。
+
+## 本次组件来源
+
+本地加密端 D14 是本次更新。三个服务端 R18 包逐字节复用 R18 / D13 发布的原包，SHA-256 不变，Ubuntu 服务端文件名仍含 `20261031.r18`；本地端 Ubuntu 包含 `20261101.d14`。清单分别记录两类组件的来源，不能把新的发布标签当成服务端重新编译的证明。

@@ -3,11 +3,11 @@
   <h1>STRYNIUM</h1>
   <h3>矿池代理与本地加密连接</h3>
   <p>矿机在本地接入，端口与矿池集中管理。<br>让矿场到服务端的连接更清晰、更易维护。</p>
-  <p><strong>服务端 R18 · 本地加密端 D13 · Windows / Linux / Ubuntu x64</strong></p>
+  <p><strong>服务端 R18 · 本地加密端 D14 · Windows / Linux / Ubuntu x64</strong></p>
   <p><a href="#downloads">软件下载</a> · <a href="#install">一键管理</a> · <a href="#start">配置教程</a> · <a href="#screens">界面预览</a> · <a href="#docs">使用文档</a></p>
 </div>
 
-> **当前发布：服务端 R18 / 本地加密端 D13 · 2026-10-31**<br>
+> **当前发布：服务端 R18 / 本地加密端 D14 · 2026-11-01**<br>
 
 **STRYNIUM Miner** 面向矿场的矿机接入与矿池代理场景。服务端提供统一管理控制台，本地加密端部署在矿机所在网络，两端配合完成授权连接和矿机转发。
 
@@ -22,20 +22,20 @@
 
 | 组件 | 系统 | 格式 / 体积 | 当前构建 | 软件包 |
 | :--- | :--- | :--- | :--- | :--- |
-| **服务端** | Windows x64 | `ZIP` · 4.63 MiB | R18 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d13/STRYNIUM-Server-Windows-x64-R18.zip) |
-| **服务端** | Linux x64 | `tar.gz` · 4.75 MiB | R18 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d13/STRYNIUM-Server-Linux-x64-R18.tar.gz) |
-| **服务端** | Ubuntu x64 | `DEB` · 3.89 MiB | R18 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d13/strynium_1.0.0+20261031.r18_amd64.deb) |
-| **本地加密端** | Windows x64 | `ZIP` · 2.50 MiB | D13 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d13/STRYNIUM-Local-Windows-x64-D13.zip) |
-| **本地加密端** | Linux x64 | `tar.gz` · 2.01 MiB | D13 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d13/STRYNIUM-Local-Linux-x64-D13.tar.gz) |
-| **本地加密端** | Ubuntu x64 | `DEB` · 1.68 MiB | D13 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d13/strynium-local_1.0.0+20261031.d13_amd64.deb) |
+| **服务端** | Windows x64 | `ZIP` · 4.63 MiB | R18 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/STRYNIUM-Server-Windows-x64-R18.zip) |
+| **服务端** | Linux x64 | `tar.gz` · 4.75 MiB | R18 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/STRYNIUM-Server-Linux-x64-R18.tar.gz) |
+| **服务端** | Ubuntu x64 | `DEB` · 3.89 MiB | R18 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/strynium_1.0.0+20261031.r18_amd64.deb) |
+| **本地加密端** | Windows x64 | `ZIP` · 2.51 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/STRYNIUM-Local-Windows-x64-D14.zip) |
+| **本地加密端** | Linux x64 | `tar.gz` · 2.02 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/STRYNIUM-Local-Linux-x64-D14.tar.gz) |
+| **本地加密端** | Ubuntu x64 | `DEB` · 1.69 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/strynium-local_1.0.0+20261101.d14_amd64.deb) |
 
-体积为下载文件大小，单位 MiB。Linux / Ubuntu 本地端解压后约 **4.97 MiB**，不附带完整浏览器。
+体积为下载文件大小，按本版发布清单计算，单位 MiB。本地端不附带完整浏览器。
 
-[SHA-256 校验文件](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d13/SHA256SUMS.txt) · [发布清单与验证范围](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d13/STRYNIUM-R18-D13-MANIFEST.json) · [校验方法](VERIFY.md)
+[SHA-256 校验文件](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/SHA256SUMS.txt) · [发布清单与验证范围](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/STRYNIUM-R18-D14-MANIFEST.json) · [校验方法](VERIFY.md)
 
 > GitHub 自动生成的 **Source code (zip / tar.gz)** 是此文档仓库的归档，不是可运行的软件安装包。请选择上表中的组件包。
 
-本次 R18 / D13 增加可信来源归组、真实矿池响应延迟及已批准的同源同名多连接抽水例外：仅唯一收到真实接受份额的连接可参与，旧任务关闭并持久化确认后才交接，逻辑归组不等于物理身份。服务端与本地端均重新构建；验证范围与现场限制见 [R18 / D13 验证说明](docs/RELEASE_R18_D13.md)。
+本次 **D14 修复本地端静默 30 秒误断矿机会话的问题**，并补齐可定位到会话的关闭日志。**已使用 R18 的服务端无需重装或重启；矿场电脑更新本地加密端即可。** 三个 R18 服务端包沿用原字节与文件名，验证范围见 [R18 / D14 说明](docs/RELEASE_R18_D14.md)。
 
 <a id="install"></a>
 ## 一键安装与管理
@@ -123,7 +123,7 @@ Linux：完整解压 `tar.gz` 后，在包目录运行：
 Ubuntu：下载并校验 DEB 后安装，以原来的普通用户启动：
 
 ```bash
-sudo apt install ./strynium-local_1.0.0+20261031.d13_amd64.deb
+sudo apt install ./strynium-local_1.0.0+20261101.d14_amd64.deb
 strynium-local
 ```
 
@@ -220,7 +220,7 @@ strynium
 <details>
 <summary>支持所有 Linux 发行版吗？</summary>
 
-本地端为 x86_64 静态链接程序，不依赖某个 glibc 版本。本轮验证环境为 Ubuntu 26.04 x64 / WSL2，覆盖打包、隔离安装卸载、控制台与加密转发，不代表所有发行版和物理机均已实测。依赖、验证范围和可选浏览模块限制见 [安装说明](INSTALL.md)。
+本地端为 x86_64 静态链接程序，不依赖某个 glibc 版本。软件包构建和隔离检查范围见本版发布清单，不代表所有发行版和矿场物理机均已实测。依赖、验证范围和可选浏览模块限制见 [安装说明](INSTALL.md)。
 
 </details>
 

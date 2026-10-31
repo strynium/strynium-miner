@@ -1,6 +1,8 @@
-# 安装与维护 · 服务端 R18 / 本地加密端 D13
+# 安装与维护 · 服务端 R18 / 本地加密端 D14
 
-从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r18-d13) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
+> 本次只更新本地加密端 D14。已使用 R18 的服务器无需重装或重启，三个服务端包沿用原字节。
+
+从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r18-d14) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
 
 <a id="manager"></a>
 ## Linux / Ubuntu 一键安装与管理
@@ -86,7 +88,7 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 
 服务端：完整解压 `STRYNIUM-Server-Windows-x64-R18.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
 
-本地端：完整解压 `STRYNIUM-Local-Windows-x64-D13.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
+本地端：完整解压 `STRYNIUM-Local-Windows-x64-D14.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
 
 本地窗口 X 隐藏到系统托盘，右键托盘退出才会停止转发。初始窗口按当前屏幕宽 59%、高 73% 设置。更新前从托盘退出，再解压到新目录，用原用户启动，保留原数据。
 
@@ -96,7 +98,7 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 ### Ubuntu DEB
 
 ```bash
-sudo apt install ./strynium-local_1.0.0+20261031.d13_amd64.deb
+sudo apt install ./strynium-local_1.0.0+20261101.d14_amd64.deb
 strynium-local
 ```
 
@@ -105,8 +107,8 @@ strynium-local
 ### Linux tar.gz
 
 ```bash
-tar -xzf STRYNIUM-Local-Linux-x64-D13.tar.gz
-cd STRYNIUM-Local-Linux-x64-D13
+tar -xzf STRYNIUM-Local-Linux-x64-D14.tar.gz
+cd STRYNIUM-Local-Linux-x64-D14
 ./scripts/start-local-client.sh
 ```
 
@@ -172,9 +174,9 @@ Linux：完整解压服务端 tar 包，在目录运行 `sh scripts/start-consol
 
 Web 管理端口、授权端口和代理端口按需放行；内部 API 只允许本机访问。证书信任需与实际地址匹配，不通过关闭证书校验来消除浏览器提示。
 
-### 已有部署更新至 R18
+### R18 服务端与 D14 本地端更新
 
-继续使用首页一键命令，选择 **1 服务端 → 1 安装 / 更新**。本次配套更新本地端 D13。Linux 本地端选择 **2 本地加密端 → 1 安装 / 更新**；Windows 本地端从托盘退出后完整替换 D13 软件包，保留原用户数据。
+**已使用 R18 的服务器无需重新安装或重启。** 本次仅更新矿场本地加密端 D14。Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D14 包，用原用户启动，保留原数据。新装或尚未更新至 R18 的服务端仍选择 **1 服务端 → 1 安装 / 更新**。
 
 管理器校验最新发布清单和软件包，备份后切换版本；保留既有账号、端口、证书、授权和数据，运行中的服务会短暂重启，失败回退。原已停止的服务保持停止。管理器部署不要另用 apt 替换 current 指向的程序；Linux 本地端更新后仍按原流程解锁并应用转发。
 
@@ -182,8 +184,10 @@ Web 管理端口、授权端口和代理端口按需放行；内部 API 只允�
 
 ## 验证范围
 
-本次服务端与本地端 Windows / Linux 均从冻结源码重新构建，隔离控制台启动验证通过；具体回归数量、忽略测试及限制见 [R18 / D13 验证说明](docs/RELEASE_R18_D13.md)。D13 三个平台软件包均采用本轮新构建的程序。
+本次更新本地端 D14，R18 服务端三个原包逐字节复用，保留原构建与验证来源。Ubuntu 服务端包中的 `20261031.r18` 是正确文件名，本地端 DEB 使用 `20261101.d14`。
 
-DEB 已核对解包、二进制和内部校验；未重新验证全部发行版的 apt 依赖解析或全部 ASIC 固件。更新后先单台矿机连续观察至少 30 分钟，这仅是初步连接观察；抽水验收还须覆盖多个完整抽水周期。
+最终原生 debug 回归 185 通过、0 失败、4 原有浏览器相关忽略；本地 UI 19 通过，全目标 Clippy 通过。真实 TCP / TLS 隔离测试使用生产监听限制，静默 90 秒后同一连接仍可继续收发。release 二进制及软件包的构建、校验和隔离启动结果另见本版发布清单，不将 debug 测试表述为 release 测试。详见 [R18 / D14 说明](docs/RELEASE_R18_D14.md)。
 
-管理器 1.0.3 及固定提交校验未改动，本轮重新验证新清单选包、完整性校验和解包；此前更新事务验证见 [管理器验证](docs/MANAGER_VERIFICATION.md)。
+未验证所有 Linux 发行版、Windows / 浏览器版本或 ASIC 固件。先单台矿机连续观察至少 30 分钟，仅作为初步连接检查；矿场长稳与抽水验收须覆盖多个完整周期。不删除数据、重置身份或提前抽水截止时间来制造验收结果。
+
+一键入口、管理器 1.0.3 与固定提交校验保持不变；本版选包及完整性检查结果以发布清单为准。此前更新事务验证见 [管理器验证](docs/MANAGER_VERIFICATION.md)。
