@@ -1,8 +1,8 @@
-# 安装与维护 · 服务端 R18 / 本地加密端 D14
+# 安装与维护 · 服务端 R19 / 本地加密端 D14
 
-> 本次只更新本地加密端 D14。已使用 R18 的服务器无需重装或重启，三个服务端包沿用原字节。
+> 本次更新服务端 R19。已经使用 D14 的本地加密端无需重复更新，三个 D14 包沿用原字节。
 
-从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r18-d14) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
+从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r19-d14) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
 
 <a id="manager"></a>
 ## Linux / Ubuntu 一键安装与管理
@@ -86,7 +86,7 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 
 ## Windows x64
 
-服务端：完整解压 `STRYNIUM-Server-Windows-x64-R18.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
+服务端：完整解压 `STRYNIUM-Server-Windows-x64-R19.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
 
 本地端：完整解压 `STRYNIUM-Local-Windows-x64-D14.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
 
@@ -150,7 +150,7 @@ ssh -L 17892:127.0.0.1:17892 your-user@your-linux-host
 新装 Ubuntu：
 
 ```bash
-sudo apt install ./strynium_1.0.0+20261031.r18_amd64.deb
+sudo apt install ./strynium_1.0.0+20261101.r19_amd64.deb
 strynium
 ```
 
@@ -174,20 +174,28 @@ Linux：完整解压服务端 tar 包，在目录运行 `sh scripts/start-consol
 
 Web 管理端口、授权端口和代理端口按需放行；内部 API 只允许本机访问。证书信任需与实际地址匹配，不通过关闭证书校验来消除浏览器提示。
 
-### R18 服务端与 D14 本地端更新
+### R19 服务端与 D14 本地端更新
 
-**已使用 R18 的服务器无需重新安装或重启。** 本次仅更新矿场本地加密端 D14。Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D14 包，用原用户启动，保留原数据。新装或尚未更新至 R18 的服务端仍选择 **1 服务端 → 1 安装 / 更新**。
+**本次更新服务端。** Linux / Ubuntu 选择 **1 服务端 → 1 安装 / 更新**；Windows 正常退出旧服务端后完整解压 R19 包，沿用原用户与数据目录。服务端更新会短暂重启。
+
+已经运行 D14 的本地端保持原样。尚未更新至 D14 时，Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D14 包，保留原用户数据。窗口比例、托盘行为及解锁启动方式均保持不变。
 
 管理器校验最新发布清单和软件包，备份后切换版本；保留既有账号、端口、证书、授权和数据，运行中的服务会短暂重启，失败回退。原已停止的服务保持停止。管理器部署不要另用 apt 替换 current 指向的程序；Linux 本地端更新后仍按原流程解锁并应用转发。
 
 已有 systemd 部署通过 `systemctl status strynium`、`journalctl -u strynium -n 100 --no-pager` 检查状态；正常停止后再卸载 `strynium` 软件包。自行配置的 systemd 单元需由管理员相应停用，默认保留数据。
 
+## 更新后检查
+
+1. 确认原端口、授权和矿机连接正常，主池持续收到真实有效份额。
+2. 仪表盘右侧服务器信息应自动更新；刚启动尚无样本时可显示未测量。当前版本显示 **v1.0.0**，软件包构建编号仍用于更新与追溯。
+3. 原抽水账本和已经形成的工作信用完整保留，因此更新后可能仍需等待旧计划到期；不需要清空数据或重建矿机身份。
+
 ## 验证范围
 
-本次更新本地端 D14，R18 服务端三个原包逐字节复用，保留原构建与验证来源。Ubuntu 服务端包中的 `20261031.r18` 是正确文件名，本地端 DEB 使用 `20261101.d14`。
+本版重新构建三个 R19 服务端包，逐字节复用三个 D14 本地端包。Ubuntu 服务端文件名为 `strynium_1.0.0+20261101.r19_amd64.deb`，本地端仍为 `strynium-local_1.0.0+20261101.d14_amd64.deb`。两类组件的构建来源、测试范围与校验信息分别列入发布清单；本次服务端验证不能替代 D14 原有验证。
 
-最终原生 debug 回归 185 通过、0 失败、4 原有浏览器相关忽略；本地 UI 19 通过，全目标 Clippy 通过。真实 TCP / TLS 隔离测试使用生产监听限制，静默 90 秒后同一连接仍可继续收发。release 二进制及软件包的构建、校验和隔离启动结果另见本版发布清单，不将 debug 测试表述为 release 测试。详见 [R18 / D14 说明](docs/RELEASE_R18_D14.md)。
+抽水连接复用和短周期调度有助于减少反复握手与高初始难度带来的等待，实际难度由矿池决定。单矿机出份具有随机性，短窗口统计可能波动；不保证每分钟或任意 24 小时窗口精确达到设定比例。详见 [R19 / D14 说明](docs/RELEASE_R19_D14.md)。
 
-未验证所有 Linux 发行版、Windows / 浏览器版本或 ASIC 固件。先单台矿机连续观察至少 30 分钟，仅作为初步连接检查；矿场长稳与抽水验收须覆盖多个完整周期。不删除数据、重置身份或提前抽水截止时间来制造验收结果。
+Windows / Linux 正式程序的隔离启动、HTTPS 与设备实际采样检查已通过；六包完整性、D14 原字节复用及管理器离线选包检查已通过。源码回归、界面测试、验证模式和忽略项详见 [VERIFY.md](VERIFY.md#本版验证范围)。尚未覆盖全部 ASIC、发行版及网络条件。单台连续观察至少 30 分钟仅用于初步连接检查；平台抽水验收需覆盖多个完整周期，并同时检查客户主池与抽水目标的真实接受记录。
 
 一键入口、管理器 1.0.3 与固定提交校验保持不变；本版选包及完整性检查结果以发布清单为准。此前更新事务验证见 [管理器验证](docs/MANAGER_VERIFICATION.md)。

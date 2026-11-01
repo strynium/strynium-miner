@@ -3,11 +3,11 @@
   <h1>STRYNIUM</h1>
   <h3>矿池代理与本地加密连接</h3>
   <p>矿机在本地接入，端口与矿池集中管理。<br>让矿场到服务端的连接更清晰、更易维护。</p>
-  <p><strong>服务端 R18 · 本地加密端 D14 · Windows / Linux / Ubuntu x64</strong></p>
+  <p><strong>服务端 R19 · 本地加密端 D14 · Windows / Linux / Ubuntu x64</strong></p>
   <p><a href="#downloads">软件下载</a> · <a href="#install">一键管理</a> · <a href="#start">配置教程</a> · <a href="#screens">界面预览</a> · <a href="#docs">使用文档</a></p>
 </div>
 
-> **当前发布：服务端 R18 / 本地加密端 D14 · 2026-11-01**<br>
+> **当前发布：服务端 R19 / 本地加密端 D14 · 2026-11-01**<br>
 
 **STRYNIUM Miner** 面向矿场的矿机接入与矿池代理场景。服务端提供统一管理控制台，本地加密端部署在矿机所在网络，两端配合完成授权连接和矿机转发。
 
@@ -22,20 +22,22 @@
 
 | 组件 | 系统 | 格式 / 体积 | 当前构建 | 软件包 |
 | :--- | :--- | :--- | :--- | :--- |
-| **服务端** | Windows x64 | `ZIP` · 4.63 MiB | R18 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/STRYNIUM-Server-Windows-x64-R18.zip) |
-| **服务端** | Linux x64 | `tar.gz` · 4.75 MiB | R18 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/STRYNIUM-Server-Linux-x64-R18.tar.gz) |
-| **服务端** | Ubuntu x64 | `DEB` · 3.89 MiB | R18 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/strynium_1.0.0+20261031.r18_amd64.deb) |
-| **本地加密端** | Windows x64 | `ZIP` · 2.51 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/STRYNIUM-Local-Windows-x64-D14.zip) |
-| **本地加密端** | Linux x64 | `tar.gz` · 2.02 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/STRYNIUM-Local-Linux-x64-D14.tar.gz) |
-| **本地加密端** | Ubuntu x64 | `DEB` · 1.69 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/strynium-local_1.0.0+20261101.d14_amd64.deb) |
+| **服务端** | Windows x64 | `ZIP` · 4.7 MiB | R19 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r19-d14/STRYNIUM-Server-Windows-x64-R19.zip) |
+| **服务端** | Linux x64 | `tar.gz` · 4.8 MiB | R19 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r19-d14/STRYNIUM-Server-Linux-x64-R19.tar.gz) |
+| **服务端** | Ubuntu x64 | `DEB` · 3.9 MiB | R19 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r19-d14/strynium_1.0.0+20261101.r19_amd64.deb) |
+| **本地加密端** | Windows x64 | `ZIP` · 2.5 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r19-d14/STRYNIUM-Local-Windows-x64-D14.zip) |
+| **本地加密端** | Linux x64 | `tar.gz` · 2.0 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r19-d14/STRYNIUM-Local-Linux-x64-D14.tar.gz) |
+| **本地加密端** | Ubuntu x64 | `DEB` · 1.7 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r19-d14/strynium-local_1.0.0+20261101.d14_amd64.deb) |
 
-体积为下载文件大小，按本版发布清单计算，单位 MiB。本地端不附带完整浏览器。
+体积为实际下载文件大小，按 MiB 四舍五入显示；精确字节数与 SHA-256 见发布清单。本地端不附带完整浏览器。
 
-[SHA-256 校验文件](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/SHA256SUMS.txt) · [发布清单与验证范围](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r18-d14/STRYNIUM-R18-D14-MANIFEST.json) · [校验方法](VERIFY.md)
+[SHA-256 校验文件](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r19-d14/SHA256SUMS.txt) · [发布清单与验证范围](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r19-d14/STRYNIUM-R19-D14-MANIFEST.json) · [校验方法](VERIFY.md)
 
 > GitHub 自动生成的 **Source code (zip / tar.gz)** 是此文档仓库的归档，不是可运行的软件安装包。请选择上表中的组件包。
 
-本次 **D14 修复本地端静默 30 秒误断矿机会话的问题**，并补齐可定位到会话的关闭日志。**已使用 R18 的服务端无需重装或重启；矿场电脑更新本地加密端即可。** 三个 R18 服务端包沿用原字节与文件名，验证范围见 [R18 / D14 说明](docs/RELEASE_R18_D14.md)。
+本次更新 **R19 服务端**：改善抽水调度与连接复用；仪表盘右侧改为自动更新的服务器信息，显示 CPU、内存、上行、下行和正式版本 **v1.0.0**。原有告警仍在「监控与日志」查看。
+
+**已经使用 D14 的本地加密端无需重复更新。** 本次附带的 Windows / Linux / Ubuntu 三个 D14 包与上次发布逐字节相同。更新保留原身份、配置、账本及已经形成的工作信用，详见 [本版说明](docs/RELEASE_R19_D14.md)。
 
 <a id="install"></a>
 ## 一键安装与管理
@@ -141,7 +143,7 @@ Windows 完整解压后运行 `Start-STRYNIUM.cmd`。Linux 解压后运行 `sh s
 Ubuntu 新安装：
 
 ```bash
-sudo apt install ./strynium_1.0.0+20261031.r18_amd64.deb
+sudo apt install ./strynium_1.0.0+20261101.r19_amd64.deb
 strynium
 ```
 
@@ -157,7 +159,7 @@ strynium
 | **矿池与端口管理** | 按币种组织接入端口，集中维护目标矿池和连接配置 |
 | **本地加密转发** | 矿机接入本地电脑，由授权客户端建立到服务端的加密连接 |
 | **真实矿机统计** | 本地端按矿机局域网 IP 去重，展示在线、离线和已识别总数 |
-| **运行监控与日志** | 查看连接状态、流量和运行记录，定位连接异常 |
+| **运行监控与日志** | 查看真实服务器资源、连接状态、流量与告警记录 |
 | **矿池延迟测试** | 服务端测量到矿池地址的 TCP 建连耗时，每条地址独立操作 |
 | **轻量软件交付** | 两端独立打包，完整保留第三方许可，本地端复用系统运行时 |
 
@@ -168,7 +170,7 @@ strynium
 
 ### 服务端 · 仪表盘
 
-集中查看算力趋势、矿机概况、端口运行状态与待处理提醒。
+集中查看算力趋势、矿机概况、端口状态与服务器信息。下图展示主要布局；当前版本右侧已改为自动刷新的服务器信息。
 
 [![STRYNIUM 服务端仪表盘演示界面](docs/images/server-console.png)](docs/images/server-console.png)
 
