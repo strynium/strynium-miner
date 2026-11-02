@@ -3,11 +3,11 @@
   <h1>STRYNIUM</h1>
   <h3>矿池代理与本地加密连接</h3>
   <p>矿机在本地接入，端口与矿池集中管理。<br>让矿场到服务端的连接更清晰、更易维护。</p>
-  <p><strong>服务端 R20 · 本地加密端 D14 · Windows / Linux / Ubuntu x64</strong></p>
+  <p><strong>服务端 R21 · 本地加密端 D15 · Windows / Linux / Ubuntu x64</strong></p>
   <p><a href="#downloads">软件下载</a> · <a href="#install">一键管理</a> · <a href="#start">配置教程</a> · <a href="#screens">界面预览</a> · <a href="#docs">使用文档</a></p>
 </div>
 
-> **当前发布：服务端 R20 / 本地加密端 D14 · 2026-11-01**<br>
+> **当前发布：服务端 R21 / 本地加密端 D15 · 2026-11-02**<br>
 
 **STRYNIUM Miner** 面向矿场的矿机接入与矿池代理场景。服务端提供统一管理控制台，本地加密端部署在矿机所在网络，两端配合完成授权连接和矿机转发。
 
@@ -22,22 +22,22 @@
 
 | 组件 | 系统 | 格式 / 体积 | 当前构建 | 软件包 |
 | :--- | :--- | :--- | :--- | :--- |
-| **服务端** | Windows x64 | `ZIP` · 4.7 MiB | R20 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r20-d14/STRYNIUM-Server-Windows-x64-R20.zip) |
-| **服务端** | Linux x64 | `tar.gz` · 4.8 MiB | R20 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r20-d14/STRYNIUM-Server-Linux-x64-R20.tar.gz) |
-| **服务端** | Ubuntu x64 | `DEB` · 3.9 MiB | R20 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r20-d14/strynium_1.0.0+20261101.r20_amd64.deb) |
-| **本地加密端** | Windows x64 | `ZIP` · 2.5 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r20-d14/STRYNIUM-Local-Windows-x64-D14.zip) |
-| **本地加密端** | Linux x64 | `tar.gz` · 2.0 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r20-d14/STRYNIUM-Local-Linux-x64-D14.tar.gz) |
-| **本地加密端** | Ubuntu x64 | `DEB` · 1.7 MiB | D14 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r20-d14/strynium-local_1.0.0+20261101.d14_amd64.deb) |
+| **服务端** | Windows x64 | `ZIP` · 4.8 MiB | R21 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r21-d15/STRYNIUM-Server-Windows-x64-R21.zip) |
+| **服务端** | Linux x64 | `tar.gz` · 4.9 MiB | R21 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r21-d15/STRYNIUM-Server-Linux-x64-R21.tar.gz) |
+| **服务端** | Ubuntu x64 | `DEB` · 4.0 MiB | R21 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r21-d15/strynium_1.0.0+20261102.r21_amd64.deb) |
+| **本地加密端** | Windows x64 | `ZIP` · 2.6 MiB | D15 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r21-d15/STRYNIUM-Local-Windows-x64-D15.zip) |
+| **本地加密端** | Linux x64 | `tar.gz` · 2.1 MiB | D15 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r21-d15/STRYNIUM-Local-Linux-x64-D15.tar.gz) |
+| **本地加密端** | Ubuntu x64 | `DEB` · 1.7 MiB | D15 | [下载](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r21-d15/strynium-local_1.0.0+20261102.d15_amd64.deb) |
 
-表中体积按实际软件包字节数换算为 MiB；精确字节数与 SHA-256 见发布清单。D14 沿用原包，本地端不附带完整浏览器。
+表中体积按实际软件包字节数换算为 MiB；精确字节数与 SHA-256 见发布清单。本次两端均重新构建；本地端不附带完整浏览器。
 
-[SHA-256 校验文件](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r20-d14/SHA256SUMS.txt) · [发布清单与验证范围](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r20-d14/STRYNIUM-R20-D14-MANIFEST.json) · [校验方法](VERIFY.md)
+[SHA-256 校验文件](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r21-d15/SHA256SUMS.txt) · [发布清单与验证范围](https://github.com/strynium/strynium-miner/releases/download/v1.0.0-r21-d15/STRYNIUM-R21-D15-MANIFEST.json) · [校验方法](VERIFY.md)
 
 > GitHub 自动生成的 **Source code (zip / tar.gz)** 是此文档仓库的归档，不是可运行的软件安装包。请选择上表中的组件包。
 
-本次更新 **R20 服务端**：BTC / BCH 抽水新连接先等待矿池给出适合预算的真实难度，准备期间继续用户主池挖矿。完善准备并发限制、故障恢复及任务隔离，保留历史账本和工作信用。
+本次一起补充 **BCH、LTC、ETC、ZEC、CKB、KAS、DASH** 的矿机接入、任务转发、工作量计量和抽水协议处理；BTC 原有行为保留并完成回归。
 
-**已经使用 D14 的本地加密端无需重复更新。** 本次附带的 Windows / Linux / Ubuntu 三个 D14 包与上次发布逐字节相同。更新保留原身份、配置、账本及已经形成的工作信用，详见 [本版说明](docs/RELEASE_R20_D14.md)。
+服务端 **R21** 与本地加密端 **D15** 均重新构建。DASH 替换已放弃的 KDA；使用 DASH 需两端配套升级。未完成所有矿机/矿池变体的实机验收，不将协议测试等同于 24 小时稳定性或抽水平滑验收。详见 [本版说明](docs/RELEASE_R21_D15.md)。
 
 <a id="install"></a>
 ## 一键安装与管理
@@ -125,7 +125,7 @@ Linux：完整解压 `tar.gz` 后，在包目录运行：
 Ubuntu：下载并校验 DEB 后安装，以原来的普通用户启动：
 
 ```bash
-sudo apt install ./strynium-local_1.0.0+20261101.d14_amd64.deb
+sudo apt install ./strynium-local_1.0.0+20261102.d15_amd64.deb
 strynium-local
 ```
 
@@ -143,7 +143,7 @@ Windows 完整解压后运行 `Start-STRYNIUM.cmd`。Linux 解压后运行 `sh s
 Ubuntu 新安装：
 
 ```bash
-sudo apt install ./strynium_1.0.0+20261101.r20_amd64.deb
+sudo apt install ./strynium_1.0.0+20261102.r21_amd64.deb
 strynium
 ```
 
