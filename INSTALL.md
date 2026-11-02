@@ -1,8 +1,8 @@
-# 安装与维护 · 服务端 R21 / 本地加密端 D15
+# 安装与维护 · 服务端 R22 / 本地加密端 D16
 
-> 本次服务端 R21 与本地端 D15 均重新构建，涵盖七个非 BTC 币种的协议补充；DASH 需两端配套更新。升级保留配置和账本，发现旧 KDA 数据时拒绝不安全迁移。
+> 本次修复在服务端 R22；D16 为本地端配套重构建，已有 D15 可继续使用。升级保留配置和账本。
 
-从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r21-d15) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
+从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r22-d16) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
 
 <a id="manager"></a>
 ## Linux / Ubuntu 一键安装与管理
@@ -86,9 +86,9 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 
 ## Windows x64
 
-服务端：完整解压 `STRYNIUM-Server-Windows-x64-R21.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
+服务端：完整解压 `STRYNIUM-Server-Windows-x64-R22.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
 
-本地端：完整解压 `STRYNIUM-Local-Windows-x64-D15.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
+本地端：完整解压 `STRYNIUM-Local-Windows-x64-D16.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
 
 本地窗口 X 隐藏到系统托盘，右键托盘退出才会停止转发。初始窗口按当前屏幕宽 59%、高 73% 设置。更新前从托盘退出，再解压到新目录，用原用户启动，保留原数据。
 
@@ -98,7 +98,7 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 ### Ubuntu DEB
 
 ```bash
-sudo apt install ./strynium-local_1.0.0+20261102.d15_amd64.deb
+sudo apt install ./strynium-local_1.0.0+20261102.d16_amd64.deb
 strynium-local
 ```
 
@@ -107,8 +107,8 @@ strynium-local
 ### Linux tar.gz
 
 ```bash
-tar -xzf STRYNIUM-Local-Linux-x64-D15.tar.gz
-cd STRYNIUM-Local-Linux-x64-D15
+tar -xzf STRYNIUM-Local-Linux-x64-D16.tar.gz
+cd STRYNIUM-Local-Linux-x64-D16
 ./scripts/start-local-client.sh
 ```
 
@@ -150,7 +150,7 @@ ssh -L 17892:127.0.0.1:17892 your-user@your-linux-host
 新装 Ubuntu：
 
 ```bash
-sudo apt install ./strynium_1.0.0+20261102.r21_amd64.deb
+sudo apt install ./strynium_1.0.0+20261102.r22_amd64.deb
 strynium
 ```
 
@@ -174,11 +174,11 @@ Linux：完整解压服务端 tar 包，在目录运行 `sh scripts/start-consol
 
 Web 管理端口、授权端口和代理端口按需放行；内部 API 只允许本机访问。证书信任需与实际地址匹配，不通过关闭证书校验来消除浏览器提示。
 
-### R21 服务端与 D15 本地端更新
+### R22 服务端与 D16 本地端更新
 
-**服务端更新：** Linux / Ubuntu 选择 **1 服务端 → 1 安装 / 更新**；Windows 正常退出旧服务端后完整解压 R21 包，沿用原用户与数据目录。服务端更新会短暂重启。
+**服务端更新：** Linux / Ubuntu 选择 **1 服务端 → 1 安装 / 更新**；Windows 正常退出旧服务端后完整解压 R22 包，沿用原用户与数据目录。服务端更新会短暂重启。
 
-已经运行 D15 的本地端保持原样。尚未更新至 D15 时，Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D15 包，保留原用户数据。窗口比例、托盘行为及解锁启动方式均保持不变。
+已经运行 D15 或 D16 的本地端可保持原样。使用 DASH 时，本地端至少需要 D15。若选择更新本地端，Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D16 包，保留原用户数据。窗口比例、托盘行为及解锁启动方式均保持不变。
 
 管理器校验最新发布清单和软件包，备份后切换版本；保留既有账号、端口、证书、授权和数据，运行中的服务会短暂重启，失败回退。原已停止的服务保持停止。管理器部署不要另用 apt 替换 current 指向的程序；Linux 本地端更新后仍按原流程解锁并应用转发。
 
@@ -192,10 +192,14 @@ Web 管理端口、授权端口和代理端口按需放行；内部 API 只允�
 
 ## 验证范围
 
-本版三个 R21 服务端包与三个 D15 本地端包均重新构建，来源绑定到同一份冻结源码。六包已通过逐文件、程序哈希、许可、内外校验和与隐私检查；管理器已完成两组件选包、解压和版本检查。
+冻结源码：9482127a3e8b6fccee5b0b7134d0c735d88f174c。
+- 原生完整 Rust 工作区：2709 通过、0 失败、16 忽略（不计为通过）。
+- 严格 Clippy、服务端/本地端界面与五项权威合同检查通过。
+- Windows/Linux 服务端与本地端四组隔离启动检查通过；独立本地端源码全部目标检查通过。
+- BCH 8191.875 难度及 nonce2 8→4→8 回放；抽水接受、拒绝、结果未知、恢复客户任务与持久账本检查。
+- KAS 小数难度回放；七个非 BTC 币种十种已支持协议变体的拒绝/断连回放。
 
-完整 Rust 工作区回归：**2701 通过、0 失败、16 忽略**；服务端界面 72 项、本地界面 19 项通过。严格 Clippy、独立本地端全部目标检查及 Windows/Linux 两组件四组隔离启动检查通过。忽略项不计为通过，详见 [VERIFY.md](VERIFY.md#本版验证范围)。
+本报告是软件回归结果，不代替所有矿机与商业矿池的实测，不代表24小时比例或曲线平滑验收。未降低费率、身份、历史信用和未知提交不重放要求；BTC费率计量未改。
+早期未优化 ETC 回放失败及修复前/测试夹具失败均保留原始日志；正式结果以本轮冻结源码的完整测试为准。
 
-BTC / BCH 抽水新连接准备期间继续用户主池，准备最多等待 600 秒，再按矿池实际有效难度及当前调度计划工作；旧工作信用保持不变。短窗口存在随机波动，软件测试不等同于全部矿机兼容、真实比例或 24 小时平滑验收。详见 [本版说明](docs/RELEASE_R21_D15.md)。
-
-一键入口、管理器 1.0.3 与固定提交校验保持不变；本版选包及完整性检查结果以发布清单为准。此前更新事务验证见 [管理器验证](docs/MANAGER_VERIFICATION.md)。
+六包按逐文件和程序哈希检查；一键管理器与安装入口保持不变。
