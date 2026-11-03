@@ -1,8 +1,8 @@
-# 安装与维护 · 服务端 R23 / 本地加密端 D17
+# 安装与维护 · 服务端 R24 / 本地加密端 D18
 
-> 本次修复在服务端 R23；D17 为本地端配套重构建，已有 D16 可继续使用。升级保留配置和账本。
+> 本次修复在服务端 R24；D18 为本地端配套重构建，已有 D17 可继续使用。升级保留配置和账本。
 
-从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r23-d17) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
+从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r24-d18) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
 
 <a id="manager"></a>
 ## Linux / Ubuntu 一键安装与管理
@@ -86,9 +86,9 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 
 ## Windows x64
 
-服务端：完整解压 `STRYNIUM-Server-Windows-x64-R23.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
+服务端：完整解压 `STRYNIUM-Server-Windows-x64-R24.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
 
-本地端：完整解压 `STRYNIUM-Local-Windows-x64-D17.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
+本地端：完整解压 `STRYNIUM-Local-Windows-x64-D18.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
 
 本地窗口 X 隐藏到系统托盘，右键托盘退出才会停止转发。初始窗口按当前屏幕宽 59%、高 73% 设置。更新前从托盘退出，再解压到新目录，用原用户启动，保留原数据。
 
@@ -98,7 +98,7 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 ### Ubuntu DEB
 
 ```bash
-sudo apt install ./strynium-local_1.0.0+20261103.d17_amd64.deb
+sudo apt install ./strynium-local_1.0.0+20261103.d18_amd64.deb
 strynium-local
 ```
 
@@ -107,8 +107,8 @@ strynium-local
 ### Linux tar.gz
 
 ```bash
-tar -xzf STRYNIUM-Local-Linux-x64-D17.tar.gz
-cd STRYNIUM-Local-Linux-x64-D17
+tar -xzf STRYNIUM-Local-Linux-x64-D18.tar.gz
+cd STRYNIUM-Local-Linux-x64-D18
 ./scripts/start-local-client.sh
 ```
 
@@ -150,7 +150,7 @@ ssh -L 17892:127.0.0.1:17892 your-user@your-linux-host
 新装 Ubuntu：
 
 ```bash
-sudo apt install ./strynium_1.0.0+20261103.r23_amd64.deb
+sudo apt install ./strynium_1.0.0+20261103.r24_amd64.deb
 strynium
 ```
 
@@ -174,11 +174,11 @@ Linux：完整解压服务端 tar 包，在目录运行 `sh scripts/start-consol
 
 Web 管理端口、授权端口和代理端口按需放行；内部 API 只允许本机访问。证书信任需与实际地址匹配，不通过关闭证书校验来消除浏览器提示。
 
-### R23 服务端与 D17 本地端更新
+### R24 服务端与 D18 本地端更新
 
-**服务端更新：** Linux / Ubuntu 选择 **1 服务端 → 1 安装 / 更新**；Windows 正常退出旧服务端后完整解压 R23 包，沿用原用户与数据目录。服务端更新会短暂重启。
+**服务端更新：** Linux / Ubuntu 选择 **1 服务端 → 1 安装 / 更新**；Windows 正常退出旧服务端后完整解压 R24 包，沿用原用户与数据目录。服务端更新会短暂重启。
 
-已经运行 D16 或 D17 的本地端可保持原样。更早版本建议更新。若选择更新本地端，Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D17 包，保留原用户数据。窗口比例、托盘行为及解锁启动方式均保持不变。
+已经运行 D17 或 D18 的本地端可保持原样。更早版本建议更新。若选择更新本地端，Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D18 包，保留原用户数据。窗口比例、托盘行为及解锁启动方式均保持不变。
 
 管理器校验最新发布清单和软件包，备份后切换版本；保留既有账号、端口、证书、授权和数据，运行中的服务会短暂重启，失败回退。原已停止的服务保持停止。管理器部署不要另用 apt 替换 current 指向的程序；Linux 本地端更新后仍按原流程解锁并应用转发。
 
@@ -192,16 +192,10 @@ Web 管理端口、授权端口和代理端口按需放行；内部 API 只允�
 
 ## 验证范围
 
-冻结源码：d3c1b81275ffc5b7ae7cff0c66644bdb57af2ebf。
-- 原生完整 Rust 工作区：2718 通过、0 失败、16 忽略（不计为通过）。
-- 严格 Clippy、服务端/本地端界面与五项权威合同检查通过。
-- Windows/Linux 服务端与本地端四组隔离启动检查通过；独立本地端源码全部目标检查通过。
-- 直连及已认证本地加密同名多连接真实 TCP 回放：客户及抽水接受、切换后客户恢复、同账本所有者迁移和多连接工作量汇总。
-- 空闲重复连接清理检查：启动、在途提交、抽水占用和唯一连接保护。
-- CKB 主节点 TCP 接通后订阅失败、备用节点订阅授权及有效份额转发。
-- LTC 精确 Scrypt 工作量与下一任务绑定、连接复用、不重放预备任务；ZEC/CKB 实际 target 与任务绑定预备；旧目标不冒充新难度，不产生虚假份额。
+- Rust 工作区测试：**2736 通过、0 失败、16 忽略**。忽略项不计入通过数，完整名称见版本清单。
+- 前端测试：服务端 **79** 项、本地端 **19** 项通过；严格 Clippy、独立本地端全目标检查和五项合同检查通过。
+- Windows / Linux 服务端与本地端重新构建；四项隔离启动、API 与遥测冒烟检查通过，检查结束后主动终止测试进程。
+- 六个软件包逐文件核对程序、依赖许可和 SHA-256；包内不包含现场原始证据或私密凭据。
+- **尚不代表现场兼容验收**：CKB 录制样本验证报文形态和路由，未以缺失会话参数的样本宣称完成真实 PoW 验证；本版未完成商业矿池、各型号实机或 24 小时实际费率与平滑验收。
 
-本报告是软件回归结果，不代替所有矿机与商业矿池的实测，不代表24小时比例或曲线平滑验收。未降低费率、身份、历史信用和未知提交不重放要求；BTC费率计量未改。
-早期编译与夹具诊断失败、被终止的诊断运行均保留原始日志；正式结果以本轮冻结源码的完整测试为准。
-
-六包按逐文件和程序哈希检查；一键管理器与安装入口保持不变。
+一键管理器与安装入口保持不变。
