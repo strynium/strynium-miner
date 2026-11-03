@@ -1,6 +1,6 @@
 # 下载文件校验
 
-从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r24-d18) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R24-D18-MANIFEST.json`，确保文件来自同一发布。
+从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r25-d19) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R25-D19-MANIFEST.json`，确保文件来自同一发布。
 
 ## Linux / Ubuntu
 
@@ -15,7 +15,7 @@ sha256sum --ignore-missing -c SHA256SUMS.txt
 ## Windows PowerShell
 
 ```powershell
-Get-FileHash -LiteralPath .\STRYNIUM-Local-Windows-x64-D18.zip -Algorithm SHA256
+Get-FileHash -LiteralPath .\STRYNIUM-Local-Windows-x64-D19.zip -Algorithm SHA256
 ```
 
 把输出的完整 SHA-256 与校验文件对应文件名的值比较，大小写不影响结果；不要只比较首尾几位。
@@ -33,8 +33,8 @@ SHA-256 证明文件字节是否一致，不等于独立发布者数字签名。
 
 ## 本版验证范围
 
-- Rust 工作区测试：**2736 通过、0 失败、16 忽略**。忽略项不计入通过数，完整名称见版本清单。
-- 前端测试：服务端 **79** 项、本地端 **19** 项通过；严格 Clippy、独立本地端全目标检查和五项合同检查通过。
-- Windows / Linux 服务端与本地端重新构建；四项隔离启动、API 与遥测冒烟检查通过，检查结束后主动终止测试进程。
-- 六个软件包逐文件核对程序、依赖许可和 SHA-256；包内不包含现场原始证据或私密凭据。
-- **尚不代表现场兼容验收**：CKB 录制样本验证报文形态和路由，未以缺失会话参数的样本宣称完成真实 PoW 验证；本版未完成商业矿池、各型号实机或 24 小时实际费率与平滑验收。
+- Rust 完整工作区：**2739 通过、0 失败、16 忽略**。忽略项不计入通过数。
+- 前端：服务端 **82** 项、本地端 **19** 项通过；严格 Clippy、独立本地端全部目标检查和五项合同检查通过。
+- Windows / Linux 服务端及本地端完成重构建和四项隔离启动、接口检查；测试进程均已结束。
+- 六个软件包逐文件核验程序、许可与 SHA-256；未包含现场原始证据和私密凭据。
+- **实机限制**：上一轮 CKB 缺少完整实机握手，现场无流量不能归因于算法。软件回归不等同于真实矿机/矿池验收，实际拒绝率、抽水比例和 24 小时平滑仍需实测。
