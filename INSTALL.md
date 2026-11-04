@@ -1,8 +1,8 @@
-# 安装与维护 · 服务端 R26 / 本地加密端 D20
+# 安装与维护 · 服务端 R27 / 本地加密端 D21
 
-> 本次修复在服务端 R26；D20 为配套重构建，已有 D19 可继续使用。升级保留配置和账本。
+> 本次修复在服务端 R27；D21 为配套重构建，已有 D20 可继续使用。升级保留配置和账本。
 
-从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r26-d20) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
+从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r27-d21) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
 
 <a id="manager"></a>
 ## Linux / Ubuntu 一键安装与管理
@@ -86,9 +86,9 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 
 ## Windows x64
 
-服务端：完整解压 `STRYNIUM-Server-Windows-x64-R26.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
+服务端：完整解压 `STRYNIUM-Server-Windows-x64-R27.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
 
-本地端：完整解压 `STRYNIUM-Local-Windows-x64-D20.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
+本地端：完整解压 `STRYNIUM-Local-Windows-x64-D21.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
 
 本地窗口 X 隐藏到系统托盘，右键托盘退出才会停止转发。初始窗口按当前屏幕宽 59%、高 73% 设置。更新前从托盘退出，再解压到新目录，用原用户启动，保留原数据。
 
@@ -98,7 +98,7 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 ### Ubuntu DEB
 
 ```bash
-sudo apt install ./strynium-local_1.0.0+20261104.d20_amd64.deb
+sudo apt install ./strynium-local_1.0.0+20261104.d21_amd64.deb
 strynium-local
 ```
 
@@ -107,8 +107,8 @@ strynium-local
 ### Linux tar.gz
 
 ```bash
-tar -xzf STRYNIUM-Local-Linux-x64-D20.tar.gz
-cd STRYNIUM-Local-Linux-x64-D20
+tar -xzf STRYNIUM-Local-Linux-x64-D21.tar.gz
+cd STRYNIUM-Local-Linux-x64-D21
 ./scripts/start-local-client.sh
 ```
 
@@ -150,7 +150,7 @@ ssh -L 17892:127.0.0.1:17892 your-user@your-linux-host
 新装 Ubuntu：
 
 ```bash
-sudo apt install ./strynium_1.0.0+20261104.r26_amd64.deb
+sudo apt install ./strynium_1.0.0+20261104.r27_amd64.deb
 strynium
 ```
 
@@ -174,11 +174,11 @@ Linux：完整解压服务端 tar 包，在目录运行 `sh scripts/start-consol
 
 Web 管理端口、授权端口和代理端口按需放行；内部 API 只允许本机访问。证书信任需与实际地址匹配，不通过关闭证书校验来消除浏览器提示。
 
-### R26 服务端与 D20 本地端更新
+### R27 服务端与 D21 本地端更新
 
-**服务端更新：** Linux / Ubuntu 选择 **1 服务端 → 1 安装 / 更新**；Windows 正常退出旧服务端后完整解压 R26 包，沿用原用户与数据目录。服务端更新会短暂重启。
+**服务端更新：** Linux / Ubuntu 选择 **1 服务端 → 1 安装 / 更新**；Windows 正常退出旧服务端后完整解压 R27 包，沿用原用户与数据目录。服务端更新会短暂重启。
 
-已经运行 D19 或 D20 的本地端可保持原样。更早版本建议更新。若选择更新本地端，Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D20 包，保留原用户数据。窗口比例、托盘行为及解锁启动方式均保持不变。
+已经运行 D20 或 D21 的本地端可保持原样。更早版本建议更新。若选择更新本地端，Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D21 包，保留原用户数据。窗口比例、托盘行为及解锁启动方式均保持不变。
 
 管理器校验最新发布清单和软件包，备份后切换版本；保留既有账号、端口、证书、授权和数据，运行中的服务会短暂重启，失败回退。原已停止的服务保持停止。管理器部署不要另用 apt 替换 current 指向的程序；Linux 本地端更新后仍按原流程解锁并应用转发。
 
@@ -192,10 +192,11 @@ Web 管理端口、授权端口和代理端口按需放行；内部 API 只允�
 
 ## 验证范围
 
-- 最终受影响库及连接统计集成回归：**406 通过、0 失败、9 忽略**。忽略项不计入通过数。其他工作区目标已在初轮通过；初轮旧 CKB 夹具及后续发现的缓存归属问题已修复并重验，原始失败记录保留。
-- 前端：服务端 **83** 项、本地端 **19** 项通过；严格 Clippy、独立本地端全部目标检查和五项合同检查通过。
+- 原生 Rust 完整工作区：**2751 通过、0 失败、16 忽略**。忽略项不计入通过数。
+- 前端：服务端 **85** 项、本地端 **19** 项通过；严格 Clippy、独立本地端全部目标检查和五项合同检查通过。
+- 现场 CKB 三组重复任务报文与两个控制用例离线回放通过；客户连接和抽水批次有专项回归覆盖。
 - Windows / Linux 服务端及本地端完成重构建和四项隔离启动、接口检查；测试进程均已结束。
 - 六个软件包逐文件核验程序、许可与 SHA-256；未包含现场原始证据和私密凭据。
-- **实机限制**：CKB 未知协议和蚂蚁主池仍待实机验证，LTC 历史拒绝尚未逐条归因。软件回归不等同于真实矿机/矿池验收，实际拒绝率、抽水比例和 24 小时平滑仍需实测。
+- **实机限制**：软件回归与回放不等同于全部实机/矿池验收；实际拒绝率、抽水比例和 24 小时平滑仍需实测。
 
 一键管理器与安装入口保持不变。
