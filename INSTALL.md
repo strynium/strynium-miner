@@ -1,8 +1,8 @@
-# 安装与维护 · 服务端 R33 / 本地加密端 D27
+# 安装与维护 · 服务端 R34 / 本地加密端 D28
 
-> 本次提供服务端 R33 与本地端 D27，处理 LTC 切换前积压和普通任务通知延迟，补充缺失任务诊断。BTC 协议与抽水策略不变。升级保留配置和账本，现场效果待验证。
+> 本次提供服务端 R34 与本地端 D28，处理 LTC 切换时的在途份额，对矿池明确作废任务单独归因。BTC 协议与抽水策略不变。升级保留配置和账本，现场效果待验证。
 
-从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r33-d27) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
+从 [当前发布](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r34-d28) 下载所需组件、`SHA256SUMS.txt` 和发布清单，先按 [VERIFY.md](VERIFY.md) 校验。保留包内 LICENSE、USE_TERMS 和 licenses 目录。无需 Rust、Node、Docker 或自行编译。
 
 <a id="manager"></a>
 ## Linux / Ubuntu 一键安装与管理
@@ -86,9 +86,9 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 
 ## Windows x64
 
-服务端：完整解压 `STRYNIUM-Server-Windows-x64-R33.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
+服务端：完整解压 `STRYNIUM-Server-Windows-x64-R34.zip`，运行 `Start-STRYNIUM.cmd`。浏览器控制台地址以启动输出为准。
 
-本地端：完整解压 `STRYNIUM-Local-Windows-x64-D27.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
+本地端：完整解压 `STRYNIUM-Local-Windows-x64-D28.zip`，运行 `STRYNIUM-Local.exe`。保留 `strynium-browse.exe`、运行库及 licenses。系统需单独安装 Microsoft Edge WebView2 Runtime；本包不附带完整浏览器。
 
 本地窗口 X 隐藏到系统托盘，右键托盘退出才会停止转发。初始窗口按当前屏幕宽 59%、高 73% 设置。更新前从托盘退出，再解压到新目录，用原用户启动，保留原数据。
 
@@ -98,7 +98,7 @@ strynium-manage server uninstall    # 卸载服务端，保留数据
 ### Ubuntu DEB
 
 ```bash
-sudo apt install ./strynium-local_1.0.0+20261105.d27_amd64.deb
+sudo apt install ./strynium-local_1.0.0+20261106.d28_amd64.deb
 strynium-local
 ```
 
@@ -107,8 +107,8 @@ strynium-local
 ### Linux tar.gz
 
 ```bash
-tar -xzf STRYNIUM-Local-Linux-x64-D27.tar.gz
-cd STRYNIUM-Local-Linux-x64-D27
+tar -xzf STRYNIUM-Local-Linux-x64-D28.tar.gz
+cd STRYNIUM-Local-Linux-x64-D28
 ./scripts/start-local-client.sh
 ```
 
@@ -150,7 +150,7 @@ ssh -L 17892:127.0.0.1:17892 your-user@your-linux-host
 新装 Ubuntu：
 
 ```bash
-sudo apt install ./strynium_1.0.0+20261105.r33_amd64.deb
+sudo apt install ./strynium_1.0.0+20261106.r34_amd64.deb
 strynium
 ```
 
@@ -174,11 +174,11 @@ Linux：完整解压服务端 tar 包，在目录运行 `sh scripts/start-consol
 
 Web 管理端口、授权端口和代理端口按需放行；内部 API 只允许本机访问。证书信任需与实际地址匹配，不通过关闭证书校验来消除浏览器提示。
 
-### R33 服务端与 D27 本地端更新
+### R34 服务端与 D28 本地端更新
 
-**服务端更新：** Linux / Ubuntu 选择 **1 服务端 → 1 安装 / 更新**；Windows 正常退出旧服务端后完整解压 R33 包，沿用原用户与数据目录。服务端更新会短暂重启。
+**服务端更新：** Linux / Ubuntu 选择 **1 服务端 → 1 安装 / 更新**；Windows 正常退出旧服务端后完整解压 R34 包，沿用原用户与数据目录。服务端更新会短暂重启。
 
-本地端 D27 提供本轮冻结源码的配套构建。更新本地端时，Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D27 包，保留原用户数据。窗口比例、托盘行为及解锁启动方式均保持不变。
+本地端 D28 提供本轮冻结源码的配套构建。更新本地端时，Linux / Ubuntu 选择 **2 本地加密端 → 1 安装 / 更新**；Windows 从托盘退出旧版后完整解压 D28 包，保留原用户数据。窗口比例、托盘行为及解锁启动方式均保持不变。
 
 管理器校验最新发布清单和软件包，备份后切换版本；保留既有账号、端口、证书、授权和数据，运行中的服务会短暂重启，失败回退。原已停止的服务保持停止。管理器部署不要另用 apt 替换 current 指向的程序；Linux 本地端更新后仍按原流程解锁并应用转发。
 
@@ -194,7 +194,7 @@ Web 管理端口、授权端口和代理端口按需放行；内部 API 只允�
 
 - 原生 Rust 完整工作区：**2782 通过、0 失败、16 忽略**。忽略项不计入通过数。
 - 前端：服务端 **85** 项、本地端 **19** 项通过；严格 Clippy、独立本地端全部目标检查和五项合同检查通过。
-- 本轮验证了 LTC 切换前处理已到达提交、非 BTC 队列满载时下发普通任务，并增加 BTC 本地拒绝诊断。现场拒绝率待验证。
+- 本轮验证了 LTC 等待矿池回包期间继续处理切换前到达的提交，并区分原矿池清理旧任务与其他本地拒绝。现场拒绝率待验证。
 - Windows / Linux 服务端及本地端完成重构建和四项隔离启动、接口检查；测试进程均已结束。
 - 六个软件包逐文件核验程序、许可与 SHA-256；未包含现场原始证据和私密凭据。
 - **实机限制**：软件回归与回放不等同于全部实机/矿池验收；实际拒绝率、抽水比例和 24 小时平滑仍需实测。
