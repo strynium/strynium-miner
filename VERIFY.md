@@ -1,6 +1,6 @@
 # 下载文件校验
 
-从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r31-d25) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R31-D25-MANIFEST.json`，确保文件来自同一发布。
+从 [本版 Releases](https://github.com/strynium/strynium-miner/releases/tag/v1.0.0-r32-d26) 下载软件包、`SHA256SUMS.txt` 与 `STRYNIUM-R32-D26-MANIFEST.json`，确保文件来自同一发布。
 
 ## Linux / Ubuntu
 
@@ -15,7 +15,7 @@ sha256sum --ignore-missing -c SHA256SUMS.txt
 ## Windows PowerShell
 
 ```powershell
-Get-FileHash -LiteralPath .\STRYNIUM-Local-Windows-x64-D25.zip -Algorithm SHA256
+Get-FileHash -LiteralPath .\STRYNIUM-Local-Windows-x64-D26.zip -Algorithm SHA256
 ```
 
 把输出的完整 SHA-256 与校验文件对应文件名的值比较，大小写不影响结果；不要只比较首尾几位。
@@ -33,9 +33,9 @@ SHA-256 证明文件字节是否一致，不等于独立发布者数字签名。
 
 ## 本版验证范围
 
-- 原生 Rust 完整工作区：**2778 通过、0 失败、16 忽略**。忽略项不计入通过数。
+- 原生 Rust 完整工作区：**2781 通过、0 失败、16 忽略**。忽略项不计入通过数。
 - 前端：服务端 **85** 项、本地端 **19** 项通过；严格 Clippy、独立本地端全部目标检查和五项合同检查通过。
-- 本轮修复抽水发送前的最新任务核对，以及 CKB 同任务调难度时的受限在途处理；BTC 行为不变，现场效果待更新后验证。
+- 本轮修复非 BTC 普通任务通知等待旧响应的问题，并合并已排队的持久化检查点；BTC 策略不变。LTC 既有账本错误的准确根因仍待确认，现场效果待更新后验证。
 - Windows / Linux 服务端及本地端完成重构建和四项隔离启动、接口检查；测试进程均已结束。
 - 六个软件包逐文件核验程序、许可与 SHA-256；未包含现场原始证据和私密凭据。
 - **实机限制**：软件回归与回放不等同于全部实机/矿池验收；实际拒绝率、抽水比例和 24 小时平滑仍需实测。
